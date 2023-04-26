@@ -7,15 +7,16 @@ import (
 )
 
 type Tenant struct {
-	ID             utils.XID                  `json:"id"`
-	Company        *TenantCompanyDetails      `json:"company"`
-	PaymentDetails *TenantPaymentDetails      `json:"payment_details"`
-	Subscription   *TenantSubscriptionDetails `json:"subscription"`
-	TenantMetadata *TenantMetadata            `json:"tenant_metadata"`
-	CreatedAt      time.Time                  `json:"created_at"`
-	UpdatedAt      time.Time                  `json:"updated_at"`
-	IsActive       bool                       `json:"is_active"`
-	DeletedAt      *time.Time                 `json:"deleted_at,omitempty"`
+	ID              utils.XID                  `json:"id"`
+	Company         *TenantCompanyDetails      `json:"company"`
+	PaymentDetails  *TenantPaymentDetails      `json:"payment_details"`
+	Subscription    *TenantSubscriptionDetails `json:"subscription"`
+	TenantMetadata  *TenantMetadata            `json:"tenant_metadata"`
+	PrimaryContacts []*TenantContactDetails    `json:"primary_contacts"`
+	CreatedAt       time.Time                  `json:"created_at"`
+	UpdatedAt       time.Time                  `json:"updated_at"`
+	IsActive        bool                       `json:"is_active"`
+	DeletedAt       *time.Time                 `json:"deleted_at,omitempty"`
 }
 
 type TenantPaymentDetails struct {
@@ -27,13 +28,12 @@ type TenantPaymentDetails struct {
 }
 
 type TenantCompanyDetails struct {
-	CompanyName     string                  `json:"company_name"`
-	Address         string                  `json:"address"`
-	City            string                  `json:"city"`
-	State           string                  `json:"state"`
-	ZipCode         string                  `json:"zip_code"`
-	Country         string                  `json:"country"`
-	PrimaryContacts []*TenantContactDetails `json:"primary_contacts"`
+	CompanyName string `json:"company_name"`
+	Address     string `json:"address"`
+	City        string `json:"city"`
+	State       string `json:"state"`
+	ZipCode     string `json:"zip_code"`
+	Country     string `json:"country"`
 }
 
 type TenantContactDetails struct {
