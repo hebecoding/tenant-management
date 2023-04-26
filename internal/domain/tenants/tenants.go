@@ -1,4 +1,4 @@
-package model
+package tenants
 
 import (
 	"time"
