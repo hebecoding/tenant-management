@@ -1,6 +1,7 @@
 package tenants
 
 import (
+	"github.com/hebecoding/tenant-management/internal/domain/rbac"
 	"time"
 
 	"github.com/hebecoding/digital-dash-commons/utils"
@@ -46,15 +47,17 @@ type TenantCompanyDetails struct {
 }
 
 type TenantContactDetails struct {
-	FirstName         string        `json:"first_name"`
-	LastName          string        `json:"last_name"`
-	Email             string        `json:"email"`
-	PhoneNumber       string        `json:"phone_number"`
-	AvatarURL         string        `json:"avatar_url"`
-	JobTitle          string        `json:"job_title"`
-	PreferredLanguage string        `json:"preferred_language"`
-	Timezone          string        `json:"timezone"`
-	TenantRoles       []*TenantRBAC `json:"tenant_roles"`
+	FirstName         string             `json:"first_name"`
+	LastName          string             `json:"last_name"`
+	Email             string             `json:"email"`
+	UserID            utils.XID          `json:"user_id"`
+	PhoneNumber       string             `json:"phone_number"`
+	AvatarURL         string             `json:"avatar_url"`
+	JobTitle          string             `json:"job_title"`
+	PreferredLanguage string             `json:"preferred_language"`
+	Timezone          string             `json:"timezone"`
+	Roles             []*TenantRBAC      `json:"roles"`
+	Permissions       []rbac.Permissions `json:"permissions"`
 }
 
 type TenantSubscriptionDetails struct {

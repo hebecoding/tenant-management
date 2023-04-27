@@ -4,6 +4,7 @@ import "github.com/hebecoding/digital-dash-commons/utils"
 
 type RoleService interface {
 	CreateRole(role *Role) error
+	CreateCustomRole(role *Role) error
 	UpdateRole(role *Role) error
 	DeleteRole(id utils.XID) error
 	GetRole(id utils.XID) (*Role, error)
@@ -17,6 +18,10 @@ func NewRoleService() RoleService {
 }
 
 func (r *roleServiceImp) CreateRole(role *Role) error {
+	return nil
+}
+
+func (r *roleServiceImp) CreateCustomRole(role *Role) error {
 	return nil
 }
 

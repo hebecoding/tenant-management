@@ -1,9 +1,10 @@
 package rbac
 
-import "github.com/hebecoding/digital-dash-commons/utils"
+type Permissions string
 
-type Permission struct {
-	ID          utils.XID `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-}
+const (
+	ReadPermission   Permissions = "read"
+	WritePermission  Permissions = "write"
+	EditPermission   Permissions = "edit"
+	DeletePermission Permissions = "delete"
+)
