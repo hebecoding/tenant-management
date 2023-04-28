@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/hebecoding/digital-dash-commons/utils"
 	"github.com/hebecoding/tenant-management/internal/domain/rbac"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type RolesRepository interface {
@@ -13,10 +14,14 @@ type RolesRepository interface {
 	FindAllRoles() ([]*rbac.Role, error)
 }
 
-type rolesRepositoryImpl struct{}
+type rolesRepositoryImpl struct {
+	db *mongo.Collection
+}
 
-func NewRolesRepository() RolesRepository {
-	return &rolesRepositoryImpl{}
+func NewRolesRepository(db *mongo.Collection) RolesRepository {
+	return &rolesRepositoryImpl{
+		db: db,
+	}
 }
 
 func (r *rolesRepositoryImpl) SaveRole(role *rbac.Role) error {

@@ -21,7 +21,7 @@ type TenantRepository interface {
 }
 
 type TenantRepo struct {
-	collection *mongo.Collection
+	db *mongo.Collection
 }
 
 func NewTenantRepository() *TenantRepo {
