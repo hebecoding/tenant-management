@@ -1,14 +1,13 @@
-package tenants
+package entities
 
 import (
-	"github.com/hebecoding/tenant-management/internal/domain/rbac"
 	"time"
 
 	"github.com/hebecoding/digital-dash-commons/utils"
 )
 
 type Tenant struct {
-	ID              utils.XID                  `json:"id"`
+	ID              utils.XID                  `json:"_id"`
 	Company         *TenantCompanyDetails      `json:"company"`
 	PaymentDetails  *TenantPaymentDetails      `json:"payment_details"`
 	Subscription    *TenantSubscriptionDetails `json:"subscription"`
@@ -22,45 +21,49 @@ type Tenant struct {
 }
 
 type TenantPaymentDetails struct {
-	PaymentMethod  string `json:"payment_method"`
-	CardNumber     string `json:"card_number"`
-	ExpMonth       int    `json:"exp_month"`
-	ExpYear        int    `json:"exp_year"`
-	SecurityCode   string `json:"security_code"`
-	BillingAddress string `json:"billing_address"`
-	BillingEmail   string `json:"billing_email"`
+	ID             utils.XID `json:"_id"`
+	PaymentMethod  string    `json:"payment_method"`
+	CardNumber     string    `json:"card_number"`
+	ExpMonth       int       `json:"exp_month"`
+	ExpYear        int       `json:"exp_year"`
+	SecurityCode   string    `json:"security_code"`
+	BillingAddress string    `json:"billing_address"`
+	BillingEmail   string    `json:"billing_email"`
 }
 
 type TenantCompanyDetails struct {
-	CompanyName        string `json:"company_name"`
-	Address            string `json:"address"`
-	City               string `json:"city"`
-	State              string `json:"state"`
-	ZipCode            string `json:"zip_code"`
-	Country            string `json:"country"`
-	WebsiteURL         string `json:"website_url"`
-	LogoURL            string `json:"logo_url"`
-	Industry           string `json:"industry"`
-	RegistrationNumber string `json:"registration_number"`
-	VATNumber          string `json:"vat_number"`
-	OperatingHours     string `json:"operating_hours"`
+	ID                 utils.XID `json:"_id"`
+	CompanyName        string    `json:"company_name"`
+	Address            string    `json:"address"`
+	City               string    `json:"city"`
+	State              string    `json:"state"`
+	ZipCode            string    `json:"zip_code"`
+	Country            string    `json:"country"`
+	WebsiteURL         string    `json:"website_url"`
+	LogoURL            string    `json:"logo_url"`
+	Industry           string    `json:"industry"`
+	RegistrationNumber string    `json:"registration_number"`
+	VATNumber          string    `json:"vat_number"`
+	OperatingHours     string    `json:"operating_hours"`
 }
 
 type TenantContactDetails struct {
-	FirstName         string             `json:"first_name"`
-	LastName          string             `json:"last_name"`
-	Email             string             `json:"email"`
-	UserID            utils.XID          `json:"user_id"`
-	PhoneNumber       string             `json:"phone_number"`
-	AvatarURL         string             `json:"avatar_url"`
-	JobTitle          string             `json:"job_title"`
-	PreferredLanguage string             `json:"preferred_language"`
-	Timezone          string             `json:"timezone"`
-	Roles             []*TenantRBAC      `json:"roles"`
-	Permissions       []rbac.Permissions `json:"permissions"`
+	ID                utils.XID     `json:"_id"`
+	FirstName         string        `json:"first_name"`
+	LastName          string        `json:"last_name"`
+	Email             string        `json:"email"`
+	UserID            utils.XID     `json:"user_id"`
+	PhoneNumber       string        `json:"phone_number"`
+	AvatarURL         string        `json:"avatar_url"`
+	JobTitle          string        `json:"job_title"`
+	PreferredLanguage string        `json:"preferred_language"`
+	Timezone          string        `json:"timezone"`
+	Roles             []*TenantRBAC `json:"roles"`
+	Permissions       []Permissions `json:"permissions"`
 }
 
 type TenantSubscriptionDetails struct {
+	ID              utils.XID `json:"_id"`
 	Plan            string    `json:"plan"`
 	StartDate       time.Time `json:"start_date"`
 	EndDate         time.Time `json:"end_date"`
@@ -77,12 +80,12 @@ type TenantSubscriptionDetails struct {
 }
 
 type TenantRBAC struct {
-	RoleID   string `json:"role_id"`
-	RoleName string `json:"role_name"`
+	ID       utils.XID `json:"_id"`
+	RoleName string    `json:"role_name"`
 }
 
 type TenantMetadata struct {
-	ID           string    `json:"id"`
+	ID           utils.XID `json:"_id"`
 	DatabaseName string    `json:"database_name"`
 	DatabaseType string    `json:"database_type"`
 	StorageQuota int64     `json:"storage_quota"`
