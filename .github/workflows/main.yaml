@@ -22,7 +22,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           level: info
-          go_version: 1.20
           golangci_lint_flags: "-E wastedassign -E unconvert -E stylecheck -E revive -E nilerr -E nestif -E ireturn -E gosec (gas)"
 
       - name: Run Security Scan
