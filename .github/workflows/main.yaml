@@ -26,8 +26,8 @@ jobs:
         uses: snyk/actions/golang@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          with:
-            args: --sarif-file-output=snyk.sarif --severity-threshold=low
+        with:
+          args: --sarif-file-output=snyk.sarif --severity-threshold=low
 
       - name: Upload Security Scan result to GitHub
         uses: github/codeql-action/upload-sarif@v2
