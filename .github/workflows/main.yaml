@@ -1,0 +1,49 @@
+name: Tenant-Management API Workflow
+
+on: [push, pull_request]
+
+env:
+  SERVICE_NAME: tenant-management-api
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Github Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Run Linter
+        uses: reviewdog/action-golangci-lint@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: info
+          go_version: 1.20
+          golangci_lint_flags: "-E wastedassign -E unconvert -E stylecheck -E revive -E nilerr -E nestif -E ireturn -E gosec (gas)"
+
+      - name: Run Security Scan
+        uses: snyk/actions/golang@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          with:
+            args: --sarif-file-output=snyk.sarif --severity-threshold=low
+
+      - name: Upload Security Scan result to GitHub
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: snyk.sarif
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Github Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20
+
+      - name: Run Unit Tests
+        run: go test -v ./...
