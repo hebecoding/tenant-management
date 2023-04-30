@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"github.com/hebecoding/tenant-management/internal/domain/entities"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type TenantRepository interface {
@@ -18,12 +17,4 @@ type TenantRepository interface {
 	UpdateCompanyDetails(ctx context.Context, id string, update *entities.TenantCompanyDetails) error
 	GetPaymentDetails(ctx context.Context, id string) (*entities.TenantPaymentDetails, error)
 	UpdatePaymentDetails(ctx context.Context, id string, update *entities.TenantPaymentDetails) error
-}
-
-type TenantRepo struct {
-	db *mongo.Collection
-}
-
-func NewTenantRepository() *TenantRepo {
-	return &TenantRepo{}
 }
