@@ -24,6 +24,11 @@ jobs:
           level: info
           golangci_lint_flags: "-E wastedassign -E unconvert -E stylecheck -E revive -E nilerr -E nestif -E ireturn -E gosec (gas)"
 
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v3.0.4
+        with:
+          fail-on-severity: moderate
+
   test:
     runs-on: ubuntu-latest
     steps:
