@@ -3,7 +3,7 @@ module github.com/hebecoding/tenant-management
 go 1.20
 
 require (
-	github.com/hebecoding/digital-dash-commons v0.0.0-20230430122227-98498a0b1aad
+	github.com/hebecoding/digital-dash-commons v0.0.0-20230504172323-9cc33d0267d9
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.15.0
 	go.mongodb.org/mongo-driver v1.11.4
