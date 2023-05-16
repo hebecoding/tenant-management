@@ -9,7 +9,8 @@ import (
 var Config *Configurations
 
 type Configurations struct {
-	DB DatabaseConfig `mapstructure:"database"`
+	DB     DatabaseConfig `mapstructure:"database"`
+	TestDB DatabaseConfig `mapstructure:"test-database"`
 }
 
 type DatabaseConfig struct {
@@ -22,7 +23,7 @@ func ReadInConfig(logger *utils.Logger) error {
 	viper.AutomaticEnv()
 	viper.SetConfigName("application.yaml")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./infrastructure/config")
+	viper.AddConfigPath(".././../config")
 
 	logger.Info("Reading in config file")
 	if err := viper.ReadInConfig(); err != nil {
@@ -36,6 +37,6 @@ func ReadInConfig(logger *utils.Logger) error {
 	}
 
 	logger.Info("Successfully read in config file")
-	
+
 	return nil
 }
