@@ -10,11 +10,28 @@ env:
       mongodb-version: [ '6.0.5']
 
 jobs:
+  runner-job:
   code-review-and-test:
     runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:${{ matrix.mongodb-version }}
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: rootpassword
+        options: --health-cmd "mongo --version" --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - name: Checkout Github Repo
         uses: actions/checkout@v3
+
+      - name: Set Environment
+        run: |
+          chmod +x .github/workflows/scripts/set-env.sh
+          .github/workflows/scripts/scripts/set-env.sh
 
       - name: Setup Go
         uses: actions/setup-go@v4.0.0
@@ -25,12 +42,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           level: info
           golangci_lint_flags: "-E wastedassign -E unconvert -E stylecheck -E revive -E nilerr -E nestif -E ireturn -E gosec"
-
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.8.0
-        with:
-          mongodb-version: ${{ matrix.mongodb-version }}
-          mongodb-port: 27017
 
       - name: Run Unit and Integration Tests
         run: go test -v ./...

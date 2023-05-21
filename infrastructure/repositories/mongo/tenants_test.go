@@ -35,7 +35,7 @@ func TestMain(m *testing.M) {
 
 	// connect to mongo test database
 	Logger.Info("Connecting to mongo test database")
-	client, err := mgo.Connect(context.Background(), options.Client().ApplyURI(config.Config.TestDB.MongoURL))
+	client, err := mgo.Connect(context.Background(), options.Client().ApplyURI(config.Config.DB.Url))
 	if err != nil {
 		Logger.Infoln("error connecting to mongo test database")
 		Logger.Fatal(err)
