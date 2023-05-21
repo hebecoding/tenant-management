@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/hebecoding/digital-dash-commons/utils"
-	"github.com/hebecoding/tenant-management/infrastructure/config"
-	"github.com/hebecoding/tenant-management/infrastructure/database/mongo"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/hebecoding/digital-dash-commons/utils"
+	"github.com/hebecoding/tenant-management/infrastructure/config"
+	"github.com/hebecoding/tenant-management/infrastructure/database/mongo"
 )
 
 func main() {
@@ -21,8 +22,10 @@ func main() {
 	}
 
 	// init db
-	db, err := mongo.NewMongoDB(logger, context.Background(), config.Config.DB.MongoURL,
-		"tenant-management", "tenants", "rbac")
+	db, err := mongo.NewMongoDB(
+		logger, context.Background(), config.Config.DB.Url,
+		"tenant-management", "tenants", "rbac",
+	)
 	if err != nil {
 		logger.Fatal(err)
 	}
