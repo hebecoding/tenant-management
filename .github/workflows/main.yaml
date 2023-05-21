@@ -29,7 +29,7 @@ jobs:
       - name: Set Environment
         run: |
           chmod +x .github/workflows/scripts/set-env.sh
-          .github/workflows/scripts/scripts/set-env.sh
+          .github/workflows/scripts/set-env.sh
 
       - name: Setup Go
         uses: actions/setup-go@v4.0.0
