@@ -1,8 +1,6 @@
 package config
 
 import (
-	"os"
-
 	"github.com/hebecoding/digital-dash-commons/utils"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -38,25 +36,7 @@ const (
 
 func ReadInConfig(logger *utils.Logger) error {
 	viper.AutomaticEnv()
-
-	if os.Getenv("ENVIRONMENT") == "" {
-		logger.Info("ENVIRONMENT not set, defaulting to local config")
-		_ = os.Setenv("ENVIRONMENT", Local)
-	} else {
-		logger.Info("ENVIRONMENT set to: " + os.Getenv("ENVIRONMENT"))
-	}
-
-	switch os.Getenv("ENVIRONMENT") {
-	case Local, Dev:
-		viper.SetConfigName("application")
-	case Test:
-		viper.SetConfigName("application-test")
-	case Stage:
-		viper.SetConfigName("application-stage")
-	case Prod:
-		viper.SetConfigName("application-prod")
-	}
-
+	viper.SetConfigName("application")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("infrastructure/config")
