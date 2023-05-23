@@ -9,20 +9,40 @@ import (
 var Config *Configurations
 
 type Configurations struct {
-	DB DatabaseConfig `mapstructure:"database"`
+	Environment string         `mapstructure:"environment"`
+	Application Application    `mapstructure:"application"`
+	DB          DatabaseConfig `mapstructure:"database"`
+}
+
+type Application struct {
+	Name    string `mapstructure:"name"`
+	Port    string `mapstructure:"port"`
+	Version string `mapstructure:"version"`
 }
 
 type DatabaseConfig struct {
-	MongoURL      string `mapstructure:"url"`
-	MongoUsername string `mapstructure:"username"`
-	MongoPassword string `mapstructure:"password"`
+	URL      string `mapstructure:"url"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
 }
+
+const (
+	Local = "local"
+	Dev   = "dev"
+	Test  = "test"
+	Stage = "stage"
+	Prod  = "prod"
+)
 
 func ReadInConfig(logger *utils.Logger) error {
 	viper.AutomaticEnv()
-	viper.SetConfigName("application.yaml")
+	viper.SetConfigName("application")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./infrastructure/config")
+	viper.AddConfigPath(".")
+	viper.AddConfigPath("infrastructure/config")
+	viper.AddConfigPath("./config")
+	viper.AddConfigPath("../../config")
+	viper.AddConfigPath(".././../config")
 
 	logger.Info("Reading in config file")
 	if err := viper.ReadInConfig(); err != nil {
@@ -36,6 +56,6 @@ func ReadInConfig(logger *utils.Logger) error {
 	}
 
 	logger.Info("Successfully read in config file")
-	
+
 	return nil
 }

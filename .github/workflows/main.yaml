@@ -6,16 +6,36 @@ env:
   SERVICE_NAME: tenant-management-api
 
 jobs:
-  code-review:
+  code-review-and-test:
+    strategy:
+      matrix:
+        mongodb-version: [ '6.0.5' ]
+
     runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:${{ matrix.mongodb-version }}
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: rootpassword
+
     steps:
       - name: Checkout Github Repo
         uses: actions/checkout@v3
+
+      - name: Write Secrets and Environment Variable to Application Configuration File
+        id: write_file
+        uses: timheuer/base64-to-file@v1.2
         with:
-          fetch-depth: 0
+          fileName: 'application.yaml'
+          fileDir: './infrastructure/config'
+          encodedString: ${{ secrets.APPLICATION_PROPERTIES }}
 
       - name: Setup Go
-        uses: actions/setup-go@v4.0.0
+        uses: actions/setup-go@v4.0.1
 
       - name: Run Linter
         uses: reviewdog/action-golangci-lint@v2
@@ -24,14 +44,5 @@ jobs:
           level: info
           golangci_lint_flags: "-E wastedassign -E unconvert -E stylecheck -E revive -E nilerr -E nestif -E ireturn -E gosec"
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Github Repo
-        uses: actions/checkout@v3
-
-      - name: Setup Go
-        uses: actions/setup-go@v4.0.0
-
-      - name: Run Unit Tests
+      - name: Run Unit and Integration Tests
         run: go test -v ./...

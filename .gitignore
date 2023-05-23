@@ -1,2 +1,5 @@
 .idea
-infrastructure/config/application.yaml
+*.yaml
+!docker-compose-local.yaml
+application.yaml
+*.base64
