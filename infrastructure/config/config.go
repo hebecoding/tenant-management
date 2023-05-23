@@ -11,11 +11,19 @@ import (
 var Config *Configurations
 
 type Configurations struct {
-	DB DatabaseConfig `mapstructure:"database"`
+	Environment string         `mapstructure:"environment"`
+	Application Application    `mapstructure:"application"`
+	DB          DatabaseConfig `mapstructure:"database"`
+}
+
+type Application struct {
+	Name    string `mapstructure:"name"`
+	Port    string `mapstructure:"port"`
+	Version string `mapstructure:"version"`
 }
 
 type DatabaseConfig struct {
-	Url      string `mapstructure:"url"`
+	URL      string `mapstructure:"url"`
 	Username string `mapstructure:"username"`
 	Password string `mapstructure:"password"`
 }
