@@ -26,10 +26,13 @@ jobs:
       - name: Checkout Github Repo
         uses: actions/checkout@v3
 
-      - name: Set Environment
-        run: |
-          chmod +x .github/workflows/scripts/set-env.sh
-          .github/workflows/scripts/set-env.sh
+      - name: Write Secrets and Environment Variable to Application Configuration File
+        id: write_file
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'application.yaml'
+          fileDir: './infrastructure/config'
+          encodedString: ${{ secrets.APPLICATION_PROPERTIES }}
 
       - name: Setup Go
         uses: actions/setup-go@v4.0.0

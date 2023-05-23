@@ -23,7 +23,7 @@ func main() {
 
 	// init db
 	db, err := mongo.NewMongoDB(
-		logger, context.Background(), config.Config.DB.Url,
+		logger, context.Background(), config.Config.DB.URL,
 		"tenant-management", "tenants", "rbac",
 	)
 	if err != nil {
