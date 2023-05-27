@@ -5,9 +5,8 @@ import (
 )
 
 type Role struct {
-	ID          utils.XID      `json:"_id"`
-	TenantID    utils.XID      `json:"tenant_id"`
-	Name        string         `json:"name"`
-	Description string         `json:"description"`
-	Permissions []*Permissions `json:"permissions"`
+	ID          utils.XID     `json:"_id" bson:"_id"`
+	Name        string        `json:"name" bson:"name"`
+	Description string        `json:"description" bson:"description"`
+	Permissions []*Permission `json:"permissions" bson:"permissions"`
 }

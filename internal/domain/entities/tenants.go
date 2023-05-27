@@ -7,59 +7,58 @@ import (
 )
 
 type Tenant struct {
-	ID              utils.XID                  `bson:"_id,omitempty" json:"_id,omitempty"`
-	Company         *TenantCompanyDetails      `bson:"company" json:"company"`
-	PaymentDetails  *TenantPaymentDetails      `bson:"payment_details" json:"payment_details"`
-	Subscription    *TenantSubscriptionDetails `bson:"subscription" json:"subscription"`
-	TenantMetadata  *TenantMetadata            `bson:"tenant_metadata" json:"tenant_metadata"`
-	PrimaryContacts []*TenantContactDetails    `bson:"primary_contacts" json:"primary_contacts"`
-	Subdomain       string                     `bson:"subdomain" json:"subdomain"`
-	CreatedAt       time.Time                  `bson:"created_at" json:"created_at"`
-	UpdatedAt       time.Time                  `bson:"updated_at" json:"updated_at"`
-	IsActive        bool                       `bson:"is_active" json:"is_active"`
-	DeletedAt       *time.Time                 `bson:"deleted_at,omitempty" json:"deleted_at,omitempty"`
+	ID              utils.XID                  `json:"_id" bson:"_id"`
+	Company         *TenantCompanyDetails      `json:"company" bson:"company"`
+	PaymentDetails  *TenantPaymentDetails      `json:"payment_details" bson:"payment_details"`
+	Subscription    *TenantSubscriptionDetails `json:"subscription" bson:"subscription"`
+	TenantMetadata  *TenantMetadata            `json:"tenant_metadata" bson:"tenant_metadata"`
+	PrimaryContacts []*TenantContactDetails    `json:"primary_contacts" bson:"primary_contacts"`
+	Subdomain       string                     `json:"subdomain" bson:"subdomain"`
+	CreatedAt       time.Time                  `json:"created_at" bson:"created_at"`
+	UpdatedAt       time.Time                  `json:"updated_at" bson:"updated_at"`
+	IsActive        bool                       `json:"is_active" bson:"is_active"`
+	DeletedAt       *time.Time                 `json:"deleted_at" bson:"deleted_at"`
 }
 
 type TenantPaymentDetails struct {
-	ID             utils.XID `bson:"_id,omitempty" json:"_id,omitempty"`
-	PaymentMethod  string    `bson:"payment_method" json:"payment_method"`
-	CardNumber     string    `bson:"card_number" json:"card_number"`
-	ExpMonth       int       `bson:"exp_month" json:"exp_month"`
-	ExpYear        int       `bson:"exp_year" json:"exp_year"`
-	SecurityCode   string    `bson:"security_code" json:"security_code"`
-	BillingAddress string    `bson:"billing_address" json:"billing_address"`
-	BillingEmail   string    `bson:"billing_email" json:"billing_email"`
+	ID             utils.XID `json:"_id,omitempty" bson:"_id,omitempty"`
+	PaymentMethod  string    `json:"payment_method" bson:"payment_method"`
+	CardNumber     string    `json:"card_number" bson:"card_number"`
+	ExpMonth       int       `json:"exp_month" bson:"exp_month"`
+	ExpYear        int       `json:"exp_year" bson:"exp_year"`
+	SecurityCode   string    `json:"security_code" bson:"security_code"`
+	BillingAddress string    `json:"billing_address" bson:"billing_address"`
+	BillingEmail   string    `json:"billing_email" bson:"billing_email"`
 }
 
 type TenantCompanyDetails struct {
-	ID                 utils.XID `bson:"_id,omitempty" json:"_id,omitempty"`
-	Name               string    `bson:"company_name" json:"name"`
-	Address            string    `bson:"address" json:"address"`
-	City               string    `bson:"city" json:"city"`
-	State              string    `bson:"state" json:"state"`
-	ZipCode            string    `bson:"zip_code" json:"zip_code"`
-	Country            string    `bson:"country" json:"country"`
-	WebsiteURL         string    `bson:"website_url" json:"website_url"`
-	LogoURL            string    `bson:"logo_url" json:"logo_url"`
-	Industry           string    `bson:"industry" json:"industry"`
-	RegistrationNumber string    `bson:"registration_number" json:"registration_number"`
-	VATNumber          string    `bson:"vat_number" json:"vat_number"`
-	OperatingHours     string    `bson:"operating_hours" json:"operating_hours"`
+	ID                 utils.XID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Name               string    `json:"name" bson:"company_name"`
+	Address            string    `json:"address" bson:"address"`
+	City               string    `json:"city" bson:"city"`
+	State              string    `json:"state" bson:"state"`
+	ZipCode            string    `json:"zip_code" bson:"zip_code"`
+	Country            string    `json:"country" bson:"country"`
+	WebsiteURL         string    `json:"website_url" bson:"website_url"`
+	LogoURL            string    `json:"logo_url" bson:"logo_url"`
+	Industry           string    `json:"industry" bson:"industry"`
+	RegistrationNumber string    `json:"registration_number" bson:"registration_number"`
+	VATNumber          string    `json:"vat_number" bson:"vat_number"`
+	OperatingHours     string    `json:"operating_hours" bson:"operating_hours"`
 }
 
 type TenantContactDetails struct {
-	ID                utils.XID     `json:"_id" bson:"_id"`
-	FirstName         string        `json:"first_name" bson:"first_name"`
-	LastName          string        `json:"last_name" bson:"last_name"`
-	Email             string        `json:"email" bson:"email"`
-	UserID            utils.XID     `json:"user_id" bson:"user_id"`
-	PhoneNumber       string        `json:"phone_number" bson:"phone_number"`
-	AvatarURL         string        `json:"avatar_url" bson:"avatar_url"`
-	JobTitle          string        `json:"job_title" bson:"job_title"`
-	PreferredLanguage string        `json:"preferred_language" bson:"preferred_language"`
-	Timezone          string        `json:"timezone" bson:"timezone"`
-	Roles             []*TenantRBAC `json:"roles" bson:"roles"`
-	Permissions       []Permissions `json:"permissions" bson:"permissions"`
+	ID                utils.XID `json:"_id" bson:"_id"`
+	FirstName         string    `json:"first_name" bson:"first_name"`
+	LastName          string    `json:"last_name" bson:"last_name"`
+	Email             string    `json:"email" bson:"email"`
+	UserID            utils.XID `json:"user_id" bson:"user_id"`
+	PhoneNumber       string    `json:"phone_number" bson:"phone_number"`
+	AvatarURL         string    `json:"avatar_url" bson:"avatar_url"`
+	JobTitle          string    `json:"job_title" bson:"job_title"`
+	PreferredLanguage string    `json:"preferred_language" bson:"preferred_language"`
+	Timezone          string    `json:"timezone" bson:"timezone"`
+	Roles             []*Role   `json:"roles" bson:"roles"`
 }
 
 type TenantSubscriptionDetails struct {
@@ -77,11 +76,6 @@ type TenantSubscriptionDetails struct {
 	AutoRenew       bool      `json:"auto_renew" bson:"auto_renew"`
 	LastPaymentDate time.Time `json:"last_payment_date" bson:"last_payment_date"`
 	PaymentGateway  string    `json:"payment_gateway" bson:"payment_gateway"`
-}
-
-type TenantRBAC struct {
-	ID       utils.XID `json:"_id" bson:"_id"`
-	RoleName string    `json:"role_name" bson:"role_name"`
 }
 
 type TenantMetadata struct {
