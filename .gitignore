@@ -1,5 +1,5 @@
 .idea
 *.yaml
-!docker-compose-local.yaml
+docker-compose-local.yaml
 application.yaml
 *.base64
