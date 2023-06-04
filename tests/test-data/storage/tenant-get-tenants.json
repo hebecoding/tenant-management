@@ -1,0 +1,556 @@
+[{
+  "name": "Get Tenants: Happy Path",
+  "expectedError": "",
+  "tenants": [
+    {
+      "_id": "35e0c41f-a801-41b1-8326-c54fd39d559a",
+      "subdomain": "sister-yard-street",
+      "created_at": "2022-02-01T00:00:00Z",
+      "updated_at": "2022-02-01T00:00:00Z",
+      "is_active": false,
+      "primary_contacts": [
+        {
+          "_id": "2ad597ca-c15f-42bb-9229-948d21f49fc1",
+          "first_name": "Veronica",
+          "last_name": "Thomas",
+          "email": "anthonyporter@example.com",
+          "user_id": "552b1886-9e91-4b4a-bc1b-500cd49ab4c5",
+          "phone_number": "250-316-0635x78829",
+          "avatar_url": "https://picsum.photos/829/10",
+          "job_title": "Engineering geologist",
+          "preferred_language": "ber",
+          "timezone": "Europe/Zagreb",
+          "roles": [
+            {
+              "_id": "2b4131b4-3ede-40a9-8011-716196953997",
+              "name": "work",
+              "description": "Drive state local night ground. Other mouth international adult need us near.\nNecessary live care figure.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        },
+        {
+          "_id": "bfbe588b-6781-409a-874f-02d6892565e8",
+          "first_name": "Brandon",
+          "last_name": "White",
+          "email": "eddie15@example.com",
+          "user_id": "1a8e6a4d-1070-47b4-9fd4-8e30df94939f",
+          "phone_number": "858-084-1940x14098",
+          "avatar_url": "https://placekitten.com/980/908",
+          "job_title": "Corporate investment banker",
+          "preferred_language": "ro",
+          "timezone": "Europe/Vilnius",
+          "roles": [
+            {
+              "_id": "2b4131b4-3ede-40a9-8011-716196953997",
+              "name": "work",
+              "description": "Drive state local night ground. Other mouth international adult need us near.\nNecessary live care figure.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        }
+      ],
+      "company": {
+        "_id": "bbb7d69b-6f48-453b-86bc-f6829b1d1434",
+        "name": "Smith, Mora and Bradley",
+        "address": "71884 Dennis Springs",
+        "city": "South Anthonybury",
+        "state": "Delaware",
+        "zip_code": "49797",
+        "country": "Somalia",
+        "website_url": "https://moore.biz/",
+        "logo_url": "https://picsum.photos/884/353",
+        "industry": "take",
+        "registration_number": "9340665300307",
+        "vat_number": "0116109731810",
+        "operating_hours": "Camera teach medical nothing once.\nBase any ok rule ball.\nSerious purpose girl imagine section. See suffer from them whatever. Blue or traditional year almost religious."
+      },
+      "deleted_at": null,
+      "payment_details": {
+        "_id": "d18f4ce9-6849-4e45-a720-1d7399d8cce7",
+        "payment_method": "American Express",
+        "card_number": "180037534172469",
+        "exp_month": 5,
+        "exp_year": 1,
+        "security_code": "070",
+        "billing_address": "116 Carpenter Mill Apt. 833\nContrerasbury, MI 27714",
+        "billing_email": "markellis@example.com"
+      },
+      "subscription_details": {
+        "_id": "efa7b1db-fb26-48f2-b2d7-ee28a3c23c50",
+        "plan": "today",
+        "start_date": "2022-02-01T00:00:00Z",
+        "end_date": "2022-02-01T00:00:00Z",
+        "active": true,
+        "billing_cycle": "reality",
+        "trial_end_date": "2022-02-01T00:00:00Z",
+        "next_billing_date": "2022-02-01T00:00:00Z",
+        "payment_status": "career",
+        "discount": false,
+        "discount_rate": 20,
+        "auto_renew": true,
+        "last_payment_date": "2022-02-01T00:00:00Z",
+        "payment_gateway": "that"
+      },
+      "tenant_metadata": {
+        "_id": "5782b02c-9fc4-4104-bdee-180af69ad3df",
+        "database_name": "actually",
+        "database_type": "fire",
+        "storage_quota": 2,
+        "storage_used": 8,
+        "api_key": "487b0d69-f12b-4d46-b33f-4c87eaaee97c",
+        "time_zone": "Europe/Vaduz",
+        "created_at": "2022-02-01T00:00:00Z",
+        "updated_at": "2022-02-01T00:00:00Z"
+      }
+    },
+    {
+      "_id": "8f0d7409-7f05-4206-b6c1-8996a914be33",
+      "subdomain": "million-much",
+      "created_at": "2022-02-01T00:00:00Z",
+      "updated_at": "2022-02-01T00:00:00Z",
+      "is_active": true,
+      "primary_contacts": [
+        {
+          "_id": "6366f90b-cad2-4fef-abe9-e25a17994ec7",
+          "first_name": "Richard",
+          "last_name": "Mccoy",
+          "email": "garyneal@example.com",
+          "user_id": "67291eab-c5ed-4484-8955-28115899851a",
+          "phone_number": "154-232-6743",
+          "avatar_url": "https://picsum.photos/104/304",
+          "job_title": "Youth worker",
+          "preferred_language": "wa",
+          "timezone": "Pacific/Kiritimati",
+          "roles": [
+            {
+              "_id": "330edf6e-2106-47c8-ab39-2d0c173ecbb9",
+              "name": "miss",
+              "description": "Same feel computer mention return wind ready. Half way rest note ability bring different. Into push allow stay summer too occur identify.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        },
+        {
+          "_id": "7028a23e-fea4-4a76-a14c-81045b636f8d",
+          "first_name": "John",
+          "last_name": "Morales",
+          "email": "kimberlysanders@example.com",
+          "user_id": "2140dd76-83b5-4bd0-b36b-c1d1ed6e3b4d",
+          "phone_number": "001-433-484-4030x2352",
+          "avatar_url": "https://dummyimage.com/820x450",
+          "job_title": "Logistics and distribution manager",
+          "preferred_language": "ro",
+          "timezone": "Asia/Dushanbe",
+          "roles": [
+            {
+              "_id": "330edf6e-2106-47c8-ab39-2d0c173ecbb9",
+              "name": "miss",
+              "description": "Same feel computer mention return wind ready. Half way rest note ability bring different. Into push allow stay summer too occur identify.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        }
+      ],
+      "company": {
+        "_id": "bd610b8d-baf9-416a-acf9-d6e3c36f1aa8",
+        "name": "Morris-Kirby",
+        "address": "51750 Davis Port Suite 241",
+        "city": "Nguyenstad",
+        "state": "Hawaii",
+        "zip_code": "50860",
+        "country": "Ethiopia",
+        "website_url": "http://warren.org/",
+        "logo_url": "https://placekitten.com/895/346",
+        "industry": "maintain",
+        "registration_number": "8986950883042",
+        "vat_number": "9377564851425",
+        "operating_hours": "Boy music radio including.\nNear low write west. Course everything throughout throw though guy. Investment knowledge what goal."
+      },
+      "deleted_at": null,
+      "payment_details": {
+        "_id": "bdaaa49a-6231-46ee-a692-9edc51e32951",
+        "payment_method": "Diners Club / Carte Blanche",
+        "card_number": "5339233551316472",
+        "exp_month": 1,
+        "exp_year": 1,
+        "security_code": "6843",
+        "billing_address": "3508 Rogers Bypass Suite 429\nMcgeeshire, VA 17638",
+        "billing_email": "valerieschultz@example.com"
+      },
+      "subscription_details": {
+        "_id": "950074cf-f48a-4f5a-902c-5f618fa590f0",
+        "plan": "garden",
+        "start_date": "2022-02-01T00:00:00Z",
+        "end_date": "2022-02-01T00:00:00Z",
+        "active": true,
+        "billing_cycle": "value",
+        "trial_end_date": "2022-02-01T00:00:00Z",
+        "next_billing_date": "2022-02-01T00:00:00Z",
+        "payment_status": "school",
+        "discount": false,
+        "discount_rate": 65,
+        "auto_renew": false,
+        "last_payment_date": "2022-02-01T00:00:00Z",
+        "payment_gateway": "example"
+      },
+      "tenant_metadata": {
+        "_id": "8421c5d3-a947-4480-826c-75c518336ec5",
+        "database_name": "feeling",
+        "database_type": "structure",
+        "storage_quota": 26,
+        "storage_used": 91,
+        "api_key": "24ec69ed-6c3a-4e61-9daf-d339399852c7",
+        "time_zone": "Asia/Ashgabat",
+        "created_at": "2022-02-01T00:00:00Z",
+        "updated_at": "2022-02-01T00:00:00Z"
+      }
+    },
+    {
+      "_id": "3cfc2885-5898-4a38-b7b6-5ea810af7a57",
+      "subdomain": "listen-yourself",
+      "created_at": "2022-02-01T00:00:00Z",
+      "updated_at": "2022-02-01T00:00:00Z",
+      "is_active": true,
+      "primary_contacts": [
+        {
+          "_id": "905fdd10-b5ee-4ac1-8ef8-69fc0df65cd2",
+          "first_name": "Jonathan",
+          "last_name": "Sanchez",
+          "email": "thomasmichelle@example.com",
+          "user_id": "6f7110d8-e2bb-473d-a916-e7820d807e9a",
+          "phone_number": "(063)144-6482",
+          "avatar_url": "https://placekitten.com/420/609",
+          "job_title": "Dealer",
+          "preferred_language": "ig",
+          "timezone": "Africa/Luanda",
+          "roles": [
+            {
+              "_id": "581f3a98-1263-4d80-9044-68b4043efccc",
+              "name": "others",
+              "description": "Age image world accept knowledge.\nOf entire ability list special. Final bank know hand level represent.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        },
+        {
+          "_id": "dfeb5c85-6d9e-4d30-af5b-f80f2fae6492",
+          "first_name": "Robert",
+          "last_name": "Smith",
+          "email": "gabriel00@example.com",
+          "user_id": "ec6c356e-21ad-4d97-b173-6e8f5d999db5",
+          "phone_number": "+1-007-018-8096x06207",
+          "avatar_url": "https://placekitten.com/190/204",
+          "job_title": "Fish farm manager",
+          "preferred_language": "be",
+          "timezone": "Europe/Athens",
+          "roles": [
+            {
+              "_id": "581f3a98-1263-4d80-9044-68b4043efccc",
+              "name": "others",
+              "description": "Age image world accept knowledge.\nOf entire ability list special. Final bank know hand level represent.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        }
+      ],
+      "company": {
+        "_id": "08217ba2-d32a-4be5-83f2-04418e289153",
+        "name": "Kennedy, Bishop and Hernandez",
+        "address": "353 Elliott Estates",
+        "city": "Joshuaport",
+        "state": "Vermont",
+        "zip_code": "09396",
+        "country": "Iraq",
+        "website_url": "https://hopkins-chapman.com/",
+        "logo_url": "https://dummyimage.com/395x546",
+        "industry": "bank",
+        "registration_number": "4380727699401",
+        "vat_number": "2374821455706",
+        "operating_hours": "Newspaper dark group middle point store her. Coach make final there forget.\nSouthern specific back."
+      },
+      "deleted_at": null,
+      "payment_details": {
+        "_id": "e39aef52-8fe2-42f0-b33c-4471a0a46585",
+        "payment_method": "JCB 16 digit",
+        "card_number": "4354446246357973",
+        "exp_month": 4,
+        "exp_year": 1,
+        "security_code": "993",
+        "billing_address": "293 Michael Summit Suite 772\nNew Jenniferfurt, ID 10211",
+        "billing_email": "bakerrebecca@example.net"
+      },
+      "subscription_details": {
+        "_id": "e947a83e-6b56-4848-a99b-803fed558660",
+        "plan": "ahead",
+        "start_date": "2022-02-01T00:00:00Z",
+        "end_date": "2022-02-01T00:00:00Z",
+        "active": true,
+        "billing_cycle": "health",
+        "trial_end_date": "2022-02-01T00:00:00Z",
+        "next_billing_date": "2022-02-01T00:00:00Z",
+        "payment_status": "rich",
+        "discount": true,
+        "discount_rate": 13,
+        "auto_renew": true,
+        "last_payment_date": "2022-02-01T00:00:00Z",
+        "payment_gateway": "somebody"
+      },
+      "tenant_metadata": {
+        "_id": "ae256e35-baf0-4eaf-af10-39b4abdf61b4",
+        "database_name": "detail",
+        "database_type": "head",
+        "storage_quota": 93,
+        "storage_used": 88,
+        "api_key": "6bb9d142-2acc-4b5e-81a5-68f153191e1a",
+        "time_zone": "Africa/Dakar",
+        "created_at": "2022-02-01T00:00:00Z",
+        "updated_at": "2022-02-01T00:00:00Z"
+      }
+    },
+    {
+      "_id": "f090bc97-1057-43d8-896f-ccf4da362e32",
+      "subdomain": "beyond-physical",
+      "created_at": "2022-02-01T00:00:00Z",
+      "updated_at": "2022-02-01T00:00:00Z",
+      "is_active": false,
+      "primary_contacts": [
+        {
+          "_id": "80a7ccab-ed81-4094-a797-8cd618c40c6c",
+          "first_name": "Julia",
+          "last_name": "Fleming",
+          "email": "fsullivan@example.net",
+          "user_id": "a28fdc3c-426b-43f0-be33-5d2729df15f3",
+          "phone_number": "+1-146-353-4986",
+          "avatar_url": "https://placekitten.com/901/896",
+          "job_title": "English as a foreign language teacher",
+          "preferred_language": "hy",
+          "timezone": "Europe/Skopje",
+          "roles": [
+            {
+              "_id": "1d20c591-98c2-466f-860d-15a515dc8d2d",
+              "name": "key",
+              "description": "Out local prove many civil. Similar nor sense. Person woman most ever top firm just none.\nEconomic enjoy lose trade. Rise event beat sure mouth. At director subject several themselves stay focus.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        },
+        {
+          "_id": "29eab539-d0df-4a60-926a-2bb9b26de216",
+          "first_name": "Kim",
+          "last_name": "Stanton",
+          "email": "alexandra15@example.com",
+          "user_id": "2c8731c3-601c-41df-9c3c-e2de51e7f62f",
+          "phone_number": "+1-631-854-3317x8404",
+          "avatar_url": "https://picsum.photos/642/845",
+          "job_title": "Veterinary surgeon",
+          "preferred_language": "ml",
+          "timezone": "Asia/Tokyo",
+          "roles": [
+            {
+              "_id": "1d20c591-98c2-466f-860d-15a515dc8d2d",
+              "name": "key",
+              "description": "Out local prove many civil. Similar nor sense. Person woman most ever top firm just none.\nEconomic enjoy lose trade. Rise event beat sure mouth. At director subject several themselves stay focus.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        }
+      ],
+      "company": {
+        "_id": "a0cc832c-ed56-44b4-a248-715066855409",
+        "name": "Washington-Carlson",
+        "address": "51465 Ryan Glens Suite 591",
+        "city": "Lake Christopher",
+        "state": "Illinois",
+        "zip_code": "53836",
+        "country": "French Guiana",
+        "website_url": "https://english.biz/",
+        "logo_url": "https://picsum.photos/864/790",
+        "industry": "another",
+        "registration_number": "4544346860301",
+        "vat_number": "1029855955975",
+        "operating_hours": "Month road challenge. So gun Democrat organization. Dark usually wonder why note development though decide."
+      },
+      "deleted_at": null,
+      "payment_details": {
+        "_id": "94ead00c-2d05-42df-91d3-d7598dc6a4c5",
+        "payment_method": "VISA 16 digit",
+        "card_number": "5397739966008131",
+        "exp_month": 1,
+        "exp_year": 10,
+        "security_code": "123",
+        "billing_address": "7100 Sierra Divide\nWest Wesley, UT 16556",
+        "billing_email": "daniellejohnson@example.com"
+      },
+      "subscription_details": {
+        "_id": "981435ee-6a38-41ef-89b4-e9d88b2b695c",
+        "plan": "matter",
+        "start_date": "2022-02-01T00:00:00Z",
+        "end_date": "2022-02-01T00:00:00Z",
+        "active": true,
+        "billing_cycle": "fill",
+        "trial_end_date": "2022-02-01T00:00:00Z",
+        "next_billing_date": "2022-02-01T00:00:00Z",
+        "payment_status": "thus",
+        "discount": false,
+        "discount_rate": 54,
+        "auto_renew": true,
+        "last_payment_date": "2022-02-01T00:00:00Z",
+        "payment_gateway": "cell"
+      },
+      "tenant_metadata": {
+        "_id": "07fcdb85-dc38-4e08-9c32-48eff3dbb994",
+        "database_name": "two",
+        "database_type": "region",
+        "storage_quota": 54,
+        "storage_used": 8,
+        "api_key": "1a446647-9c9d-4304-91b2-c24bd544d41e",
+        "time_zone": "Europe/Vatican",
+        "created_at": "2022-02-01T00:00:00Z",
+        "updated_at": "2022-02-01T00:00:00Z"
+      }
+    },
+    {
+      "_id": "e833ff07-11d8-4796-b6c6-270dbbb708c0",
+      "subdomain": "together-good",
+      "created_at": "2022-02-01T00:00:00Z",
+      "updated_at": "2022-02-01T00:00:00Z",
+      "is_active": false,
+      "primary_contacts": [
+        {
+          "_id": "cc8546cb-eb9e-4c9a-bf4f-9044e4fbba94",
+          "first_name": "Jonathon",
+          "last_name": "Hernandez",
+          "email": "todd43@example.org",
+          "user_id": "388aa609-ef9f-4f27-8718-972409d26589",
+          "phone_number": "+1-847-792-6712x7311",
+          "avatar_url": "https://picsum.photos/814/234",
+          "job_title": "Osteopath",
+          "preferred_language": "cy",
+          "timezone": "Asia/Bahrain",
+          "roles": [
+            {
+              "_id": "029bcb6b-e477-4cbc-a23b-c1efc5b1da63",
+              "name": "size",
+              "description": "Color knowledge give lead everyone. Doctor because any want yeah cold meet.\nLight finish establish. Remain series over spend could PM.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        },
+        {
+          "_id": "14c22a5f-7de2-4770-9302-a7eebb80f3f7",
+          "first_name": "Adrian",
+          "last_name": "Smith",
+          "email": "vaughndanielle@example.org",
+          "user_id": "49fda94f-f56f-4664-8bcf-64142ec116db",
+          "phone_number": "+1-468-513-1776x1169",
+          "avatar_url": "https://picsum.photos/762/694",
+          "job_title": "Product designer",
+          "preferred_language": "bhb",
+          "timezone": "Asia/Dubai",
+          "roles": [
+            {
+              "_id": "029bcb6b-e477-4cbc-a23b-c1efc5b1da63",
+              "name": "size",
+              "description": "Color knowledge give lead everyone. Doctor because any want yeah cold meet.\nLight finish establish. Remain series over spend could PM.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ]
+        }
+      ],
+      "company": {
+        "_id": "fc573cd6-91a8-408f-aa0f-eed66d6a5f44",
+        "name": "Knapp, Curtis and Hansen",
+        "address": "86390 Amanda Overpass Apt. 430",
+        "city": "East Cynthiahaven",
+        "state": "Indiana",
+        "zip_code": "02437",
+        "country": "Jordan",
+        "website_url": "http://www.day.com/",
+        "logo_url": "https://dummyimage.com/340x79",
+        "industry": "leg",
+        "registration_number": "1195937993897",
+        "vat_number": "9278578762762",
+        "operating_hours": "Early one admit provide people rule gas. Half me lead today yourself section case contain.\nBox method bill national manage matter dog. Easy lay accept no place current. Reduce leg require plan."
+      },
+      "deleted_at": null,
+      "payment_details": {
+        "_id": "27494834-aca3-417c-903f-83b1d7d3e6fe",
+        "payment_method": "VISA 13 digit",
+        "card_number": "4978166715410211904",
+        "exp_month": 10,
+        "exp_year": 4,
+        "security_code": "795",
+        "billing_address": "35326 Gregory Mountains Suite 378\nGraveschester, NJ 69520",
+        "billing_email": "bwhite@example.net"
+      },
+      "subscription_details": {
+        "_id": "6fd1a5d0-64ff-4d0c-8956-785a3df87815",
+        "plan": "only",
+        "start_date": "2022-02-01T00:00:00Z",
+        "end_date": "2022-02-01T00:00:00Z",
+        "active": true,
+        "billing_cycle": "others",
+        "trial_end_date": "2022-02-01T00:00:00Z",
+        "next_billing_date": "2022-02-01T00:00:00Z",
+        "payment_status": "practice",
+        "discount": false,
+        "discount_rate": 45,
+        "auto_renew": false,
+        "last_payment_date": "2022-02-01T00:00:00Z",
+        "payment_gateway": "town"
+      },
+      "tenant_metadata": {
+        "_id": "3216266f-29f2-4603-ba3f-1d11183d5f6c",
+        "database_name": "that",
+        "database_type": "with",
+        "storage_quota": 42,
+        "storage_used": 56,
+        "api_key": "ff146703-5996-4654-b2d1-a456bcdaaeb9",
+        "time_zone": "America/Tegucigalpa",
+        "created_at": "2022-02-01T00:00:00Z",
+        "updated_at": "2022-02-01T00:00:00Z"
+      }
+    }
+  ]
+}]

@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Get a Tenant by ID: Happy Path",
+    "tenantID": "a79b76ae-f8cc-4538-b290-8a2ac0103b25",
+    "expectedError": ""
+    },
+  {
+    "name": "Get a Tenant by ID: Tenant Not Found",
+    "tenantID": "a79b76ae-f8cc-4538-b290-8a2ac0103b26",
+    "expectedError": "no tenant documents found"
+    }
+]

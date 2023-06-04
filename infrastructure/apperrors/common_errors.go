@@ -21,4 +21,5 @@ const (
 	ErrRetrievingTenant       = "error retrieving tenant - %v"
 	ErrRetrievingTenants      = "error retrieving tenants"
 	ErrUnmarshallingTenant    = "error unmarshalling tenants"
+	ErrNoTenantFound          = "no tenant found"
 )
