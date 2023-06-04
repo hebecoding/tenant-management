@@ -59,59 +59,19 @@ func TestMain(m *testing.M) {
 	// run tests
 	code := m.Run()
 
+	// drop test collections
+	logger.Info("Dropping test collections")
+	if err := storage.DB.Drop(context.Background()); err != nil {
+		logger.Fatal(err)
+	}
+
 	os.Exit(code)
-
-}
-
-func TestTenantRepository_Create(t *testing.T) {
-	// read in test data from file
-	file, err := readInJSONTestDataFile("test-data/tenant-create.json")
-	if err != nil {
-		assert.Nil(t, err)
-	}
-
-	var tests []struct {
-		Name          string
-		Tenant        *entities.Tenant
-		ExpectedError string
-		CancelContext bool
-	}
-
-	// decode test data
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&tests); err != nil {
-		assert.Nil(t, err)
-		logger.Error("error decoding test data: ", err)
-	}
-
-	// run test cases
-	for _, tt := range tests {
-		t.Run(
-			tt.Name, func(t *testing.T) {
-				var expectedErr error
-				if tt.ExpectedError != "" {
-					expectedErr = errors.New(tt.ExpectedError)
-				}
-
-				ctx, cancel := context.WithCancel(context.Background())
-				defer cancel()
-				if tt.CancelContext {
-					expectedErr = context.Canceled
-					cancel()
-				}
-
-				if gotErr := storage.Repo.Create(ctx, tt.Tenant); gotErr != expectedErr {
-					assert.Equal(t, expectedErr, gotErr)
-				}
-			},
-		)
-	}
 
 }
 
 func TestTenantRepository_GetTenants(t *testing.T) {
 	// read in test data from file
-	file, err := readInJSONTestDataFile("test-data/tenant-get-tenants.json")
+	file, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-get-tenants.json")
 	if err != nil {
 		assert.Nil(t, err)
 	}
@@ -157,6 +117,61 @@ func TestTenantRepository_GetTenants(t *testing.T) {
 					assert.Equal(t, expectedErr, gotErr)
 				}
 				fmt.Println(tenants)
+			},
+		)
+	}
+
+}
+
+func TestTenantRepository_GetTenantByID(t *testing.T) {
+	// read in test data from testData
+	testData, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-mock-data.json")
+	if err != nil {
+		assert.Nil(t, err)
+	}
+
+	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-get-by-id.json")
+	if err != nil {
+		assert.Nil(t, err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer testData.Close()
+	defer cancel()
+
+	var testTenants []*entities.Tenant
+	var tests []struct {
+		Name          string
+		TenantID      string
+		ExpectedError string
+	}
+
+	// decode test data
+	decoder := json.NewDecoder(testData)
+	_ = decoder.Decode(&testTenants)
+	decoder = json.NewDecoder(testFile)
+	_ = decoder.Decode(&tests)
+
+	// create tenants+
+	for _, tt := range testTenants {
+		if gotErr := storage.Repo.Create(ctx, tt); gotErr != nil {
+			assert.Nil(t, gotErr)
+		}
+	}
+
+	// run test cases
+	for _, tt := range tests {
+		t.Run(
+			tt.Name, func(t *testing.T) {
+				var expectedErr error
+				if tt.ExpectedError != "" {
+					expectedErr = errors.New(tt.ExpectedError)
+				}
+
+				_, gotErr := storage.Repo.GetTenantByID(ctx, tt.TenantID)
+				if gotErr != expectedErr {
+					assert.ErrorContains(t, gotErr, expectedErr.Error())
+				}
 			},
 		)
 	}

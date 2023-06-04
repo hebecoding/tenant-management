@@ -26,9 +26,6 @@ func NewTenantRepository(db *mongo.Collection, logger *utils.Logger) *TenantRepo
 // Ctx is used to cancel the operation if the context is cancelled.
 // Tenants is the tenant to be created.
 func (r *TenantRepository) Create(ctx context.Context, tenant *entities.Tenant) error {
-	if ctx.Err() != nil {
-		return ctx.Err()
-	}
 	r.logger.Infof("inserting tenant into database: %v", tenant.ID)
 	_, err := r.db.InsertOne(ctx, tenant)
 	if err != nil {
@@ -45,11 +42,6 @@ func (r *TenantRepository) Create(ctx context.Context, tenant *entities.Tenant) 
 // Ctx is used to cancel the operation if the context is cancelled.
 func (r *TenantRepository) GetTenants(ctx context.Context) ([]*entities.Tenant, error) {
 	var tenants []*entities.Tenant
-
-	// check if context is cancelled
-	if ctx.Err() != nil {
-		return nil, ctx.Err()
-	}
 
 	// get all tenants from database
 	r.logger.Infoln("retrieving tenants from database")
@@ -70,4 +62,30 @@ func (r *TenantRepository) GetTenants(ctx context.Context) ([]*entities.Tenant, 
 	r.logger.Infof("found %d tenants", len(tenants))
 
 	return tenants, nil
+}
+
+// GetTenantByID returns a tenant from the database.
+// Ctx is used to cancel the operation if the context is cancelled.
+// ID is the id of the tenant to be retrieved.
+func (r *TenantRepository) GetTenantByID(ctx context.Context, id string) (*entities.Tenant, error) {
+	var tenant *entities.Tenant
+
+	// get tenant from database
+	r.logger.Infof("retrieving tenant from database: %v", id)
+	if err := r.db.FindOne(
+		ctx, bson.M{"_id.id": id},
+	).
+		Decode(&tenant); err != nil {
+		switch err {
+		case mongo.ErrNoDocuments:
+			r.logger.Errorf(apperrors.ErrNoTenantFound, id)
+			return nil, apperrors.ErrNoTenantDocumentsFound
+		default:
+			r.logger.Errorf(apperrors.ErrRetrievingTenant, id)
+			r.logger.Error(err)
+			return nil, apperrors.ErrRetrievingTenantDocument
+		}
+	}
+
+	return tenant, nil
 }
