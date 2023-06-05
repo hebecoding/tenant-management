@@ -89,3 +89,21 @@ func (r *TenantRepository) GetTenantByID(ctx context.Context, id string) (*entit
 
 	return tenant, nil
 }
+
+func (r *TenantRepository) UpdateTenant(ctx context.Context, tenant *entities.Tenant) error {
+	r.logger.Infof("updating tenant in database: %v", tenant.ID)
+	result, err := r.db.UpdateOne(
+		ctx,
+		bson.M{"_id": tenant.ID},
+		bson.M{"$set": tenant},
+	)
+	if err != nil {
+		r.logger.Errorf(apperrors.ErrUpdatingTenant, tenant.ID)
+		r.logger.Error(err)
+		return apperrors.ErrUpdatingTenantDocument
+	}
+
+	r.logger.Infof("updated %v documents", result.ModifiedCount)
+
+	return nil
+}

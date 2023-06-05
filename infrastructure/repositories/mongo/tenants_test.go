@@ -178,6 +178,73 @@ func TestTenantRepository_GetTenantByID(t *testing.T) {
 
 }
 
+func TestTenantRepository_UpdateTenant(t *testing.T) {
+	// read in test data from testData
+	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-update.json")
+	if err != nil {
+		assert.Nil(t, err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	var tests []struct {
+		Name          string
+		TenantID      string
+		UpdatedValues map[string]interface{}
+		ExpectedError string
+	}
+
+	// decode test data
+	decoder := json.NewDecoder(testFile)
+	_ = decoder.Decode(&tests)
+
+	// run test cases
+	for _, tt := range tests {
+		newTenant := &entities.Tenant{}
+		var testValues struct {
+			PaymentDetails *entities.TenantPaymentDetails `json:"payment_details"`
+		}
+
+		vals, err := json.Marshal(tt.UpdatedValues)
+		assert.NoError(t, err)
+
+		if err := json.Unmarshal(vals, &testValues); err != nil {
+			assert.Nil(t, err)
+		}
+
+		t.Run(
+			tt.Name, func(t *testing.T) {
+				var expectedErr error
+				if tt.ExpectedError != "" {
+					expectedErr = errors.New(tt.ExpectedError)
+				}
+
+				tenant, gotErr := storage.Repo.GetTenantByID(ctx, tt.TenantID)
+				if gotErr != expectedErr {
+					assert.ErrorContains(t, gotErr, expectedErr.Error())
+				}
+
+				switch {
+				case testValues.PaymentDetails != nil:
+					newTenant.ID = tenant.ID
+					newTenant.PaymentDetails = testValues.PaymentDetails
+
+					if gotErr := storage.Repo.UpdateTenant(ctx, newTenant); gotErr != expectedErr {
+						assert.ErrorContains(t, gotErr, expectedErr.Error())
+					}
+
+					tenant, err = storage.Repo.GetTenantByID(ctx, tt.TenantID)
+					assert.Nil(t, err)
+
+					assert.EqualValues(t, newTenant.PaymentDetails, tenant.PaymentDetails)
+				}
+
+			},
+		)
+	}
+}
+
 func readInJSONTestDataFile(path string) (*os.File, error) {
 	// read in test data from file
 	logger.Info("Reading in test data from file")
