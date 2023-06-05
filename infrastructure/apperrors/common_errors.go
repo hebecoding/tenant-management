@@ -6,12 +6,10 @@ import (
 
 var (
 	ErrCreatingTenantDocument      = errors.New("error creating tenant document in database")
-	ErrRetrievingTenantDocument    = errors.New("error retrieving tenant document from database")
-	ErrRetrievingTenantDocuments   = errors.New("error retrieving tenant documents from database")
+	ErrRetrievingTenantDocument    = errors.New("error retrieving tenant document(s) from database")
 	ErrNoTenantDocumentsFound      = errors.New("no tenant documents found")
-	ErrInsertingTenantDocuments    = errors.New("error inserting tenant document(s) into database")
-	ErrUpdatingTenantDocuments     = errors.New("error updating tenant documents in database")
-	ErrDeletingTenantDocuments     = errors.New("error deleting tenant documents from database")
+	ErrUpdatingTenantDocument      = errors.New("error updating tenant document(s) in database")
+	ErrDeletingTenantDocument      = errors.New("error deleting tenant document(s) from database")
 	ErrUnmarshallingTenantDocument = errors.New("error unmarshalling tenant document")
 )
 
@@ -22,4 +20,5 @@ const (
 	ErrRetrievingTenants      = "error retrieving tenants"
 	ErrUnmarshallingTenant    = "error unmarshalling tenants"
 	ErrNoTenantFound          = "no tenant found"
+	ErrUpdatingTenant         = "error updating tenant - %v"
 )

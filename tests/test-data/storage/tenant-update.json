@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Update Tenant: Happy Path: Update Tenant Payment Details",
+    "tenantID": "a79b76ae-f8cc-4538-b290-8a2ac0103b25",
+    "updatedValues": {
+      "payment_details": {
+        "_id": "fcede7ac-6d9d-4e8b-b708-4053bc48aedc",
+        "payment_method": "Discover",
+        "card_number": "213158991560177",
+        "exp_month": 11,
+        "exp_year": 4,
+        "security_code": "357",
+        "billing_address": "10392 Gallegos Pine\nNorth Natalieside, AS 98702",
+        "billing_email": "angiegarner@example.net"
+      }
+    },
+    "expectedError": ""
+  }
+]
