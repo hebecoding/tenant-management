@@ -180,21 +180,14 @@ func TestTenantRepository_GetTenantByID(t *testing.T) {
 
 func TestTenantRepository_UpdateTenant(t *testing.T) {
 	// read in test data from testData
-	testData, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-mock-data.json")
-	if err != nil {
-		assert.Nil(t, err)
-	}
-
 	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-update.json")
 	if err != nil {
 		assert.Nil(t, err)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
-	defer testData.Close()
 	defer cancel()
 
-	var testTenants []*entities.Tenant
 	var tests []struct {
 		Name          string
 		TenantID      string
@@ -203,17 +196,8 @@ func TestTenantRepository_UpdateTenant(t *testing.T) {
 	}
 
 	// decode test data
-	decoder := json.NewDecoder(testData)
-	_ = decoder.Decode(&testTenants)
-	decoder = json.NewDecoder(testFile)
+	decoder := json.NewDecoder(testFile)
 	_ = decoder.Decode(&tests)
-
-	// create tenants+
-	for _, tt := range testTenants {
-		if gotErr := storage.Repo.Create(ctx, tt); gotErr != nil {
-			assert.Nil(t, gotErr)
-		}
-	}
 
 	// run test cases
 	for _, tt := range tests {
