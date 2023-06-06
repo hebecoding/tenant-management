@@ -1,0 +1,5 @@
+[{
+  "name": "Delete Tenants: Happy Path",
+  "tenantID": "f5ec3326-51fa-475c-a8db-1ca8ca078efb",
+  "expectedError": ""
+}]
