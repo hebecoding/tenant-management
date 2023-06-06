@@ -41,6 +41,10 @@ func TestMain(m *testing.M) {
 		logger.Fatal(err)
 	}
 
+	if err := client.Ping(context.Background(), nil); err != nil {
+		logger.Fatal(errors.Wrap(err, "error pinging mongo test database"))
+	}
+
 	defer client.Disconnect(context.Background())
 
 	// create new test collection for tenants
