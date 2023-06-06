@@ -16,6 +16,7 @@ var (
 const (
 	ErrRollingBackTransaction = "rolling back transaction"
 	ErrCreatingTenant         = "error creating tenant - %v"
+	ErrDeletingTenant         = "error deleting tenant - %v"
 	ErrRetrievingTenant       = "error retrieving tenant - %v"
 	ErrRetrievingTenants      = "error retrieving tenants"
 	ErrUnmarshallingTenant    = "error unmarshalling tenants"

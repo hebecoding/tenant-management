@@ -90,6 +90,20 @@ func (r *TenantRepository) GetTenantByID(ctx context.Context, id string) (*entit
 	return tenant, nil
 }
 
+func (r *TenantRepository) DeleteTenant(ctx context.Context, id string) error {
+	r.logger.Infof("deleting tenant from database: %v", id)
+
+	result, err := r.db.DeleteOne(ctx, bson.M{"_id.id": id})
+	if err != nil {
+		r.logger.Errorf(apperrors.ErrDeletingTenant, id)
+		r.logger.Error(err)
+		return apperrors.ErrDeletingTenantDocument
+	}
+
+	r.logger.Infof("deleted %v documents", result.DeletedCount)
+	return nil
+}
+
 func (r *TenantRepository) UpdateTenant(ctx context.Context, tenant *entities.Tenant) error {
 	r.logger.Infof("updating tenant in database: %v", tenant.ID)
 	result, err := r.db.UpdateOne(
