@@ -46,8 +46,8 @@ func TestMain(m *testing.M) {
 	}
 
 	defer client.Disconnect(context.Background())
-
-	// create new test collection for tenants
+	
+	// create new collection for tenants
 	collection := client.Database("test_tenants").Collection("tenants")
 	storage.DB = collection
 
@@ -84,12 +84,6 @@ func TestMain(m *testing.M) {
 
 	// run tests
 	code := m.Run()
-
-	// drop test collections
-	logger.Info("Dropping test collections")
-	if err := storage.DB.Drop(context.Background()); err != nil {
-		logger.Fatal(err)
-	}
 
 	os.Exit(code)
 

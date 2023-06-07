@@ -13,6 +13,7 @@ type TenantService interface {
 	GetTenantCompanies(ctx context.Context, id string) ([]*entities.TenantCompanyDetails, error)
 	GetTenantCompanyByID(ctx context.Context, id string, companyID string) (*entities.TenantCompanyDetails, error)
 	GetTenantPaymentDetails(ctx context.Context, id string) ([]*entities.TenantPaymentDetails, error)
+	GetTenantByPaymentID(ctx context.Context, paymentID string) (*entities.Tenant, error)
 	GetTenantSubscription(ctx context.Context, id string) (*entities.TenantSubscriptionDetails, error)
 	ListTenants(ctx context.Context, offset, limit int64) ([]*entities.Tenant, error)
 	UpdateTenant(ctx context.Context, tenant *entities.Tenant) error
