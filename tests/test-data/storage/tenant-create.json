@@ -3,89 +3,123 @@
     "name": "Create a Tenant: Happy Path",
     "expectedError": "",
     "tenant": {
-      "_id": "6108a5b6d571f51e71273f21",
-      "company": {
-        "_id": "6108a5b6d571f51e71273f22",
-        "name": "Acme Inc.",
-        "address": "500 Acme St.",
-        "city": "New York",
-        "state": "NY",
-        "zip_code": "10001",
-        "country": "USA",
-        "website_url": "https://www.acmeinc.com",
-        "logo_url": "https://www.acmeinc.com/logo.png",
-        "industry": "E-Commerce",
-        "registration_number": "AC123456",
-        "vat_number": "AC123456VAT",
-        "operating_hours": "9am - 6pm"
-      },
-      "payment_details": {
-        "_id": "6108a5b6d571f51e71273f23",
-        "payment_method": "Credit Card",
-        "card_number": "4532015112830366",
-        "exp_month": 11,
-        "exp_year": 2025,
-        "security_code": "321",
-        "billing_address": "500 Acme St., New York, NY, 10001",
-        "billing_email": "billing@acmeinc.com"
-      },
-      "subscription_details": {
-        "_id": "6108a5b6d571f51e71273f24",
-        "plan": "Platinum Plan",
-        "start_date": "2022-02-01T00:00:00Z",
-        "end_date": "2023-02-01T00:00:00Z",
-        "active": true,
-        "billing_cycle": "Annual",
-        "trial_end_date": "2022-02-15T00:00:00Z",
-        "next_billing_date": "2023-02-01T00:00:00Z",
-        "payment_status": "Paid",
-        "discount": true,
-        "discount_rate": 15,
-        "auto_renew": true,
-        "last_payment_date": "2022-02-01T00:00:00Z",
-        "payment_gateway": "Stripe"
-      },
-      "tenant_metadata": {
-        "_id": "6108a5b6d571f51e71273f25",
-        "database_name": "acmeinc_db",
-        "database_type": "PostgreSQL",
-        "storage_quota": 200000,
-        "storage_used": 80000,
-        "api_key": "acme-api-key",
-        "time_zone": "America/New_York",
-        "created_at": "2022-02-01T00:00:00Z",
-        "updated_at": "2022-10-01T00:00:00Z"
-      },
+      "_id": "91638ed3-bd51-4ea6-90e0-d9e8b5bdbdc0",
+      "subdomain": "talk-light-thought",
+      "created_at": "2022-02-01T00:00:00Z",
+      "updated_at": "2022-02-01T00:00:00Z",
+      "is_active": true,
       "primary_contacts": [
         {
-          "_id": "6108a5b6d571f51e71273f26",
-          "first_name": "Jane",
-          "last_name": "Doe",
-          "email": "jane.doe@acmeinc.com",
-          "user_id": "6108a5b6d571f51e71273f27",
-          "phone_number": "+1 (987) 654-3210",
-          "avatar_url": "https://www.acmeinc.com/avatars/jane_doe.png",
-          "job_title": "CEO",
-          "preferred_language": "English",
-          "timezone": "America/New_York",
+          "_id": "59598c27-9179-487b-a57e-c2060abce1f2",
+          "first_name": "Amanda",
+          "last_name": "Morris",
+          "email": "markstewart@example.org",
+          "user_id": "96e70acc-d01c-42a5-b2d6-4dd4992aa144",
+          "phone_number": "935.504.7777x10837",
+          "avatar_url": "https://picsum.photos/882/133",
+          "job_title": "Accommodation manager",
+          "preferred_language": "kl",
+          "timezone": "America/Bogota",
           "roles": [
             {
-              "_id": "6108a5b6d571f51e71273f28",
-              "role_name": "Admin"
+              "_id": "26abd9b6-590d-43a2-8da7-49ff83619919",
+              "name": "method",
+              "description": "Class deep when they product before create know. Laugh someone accept cut risk. Campaign no above run turn.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
             }
           ],
-          "permissions": [
-            "read",
-            "write",
-            "delete"
-          ]
+          "is_active": true
+        },
+        {
+          "_id": "227130dd-e637-4fca-ad01-ad7b49b10ab9",
+          "first_name": "Wendy",
+          "last_name": "Fowler",
+          "email": "martinanthony@example.net",
+          "user_id": "a5604c2e-c938-4570-89fd-6bf27e3c6577",
+          "phone_number": "(053)467-1206x054",
+          "avatar_url": "https://placekitten.com/817/360",
+          "job_title": "Travel agency manager",
+          "preferred_language": "ak",
+          "timezone": "Indian/Comoro",
+          "roles": [
+            {
+              "_id": "26abd9b6-590d-43a2-8da7-49ff83619919",
+              "name": "method",
+              "description": "Class deep when they product before create know. Laugh someone accept cut risk. Campaign no above run turn.",
+              "permissions": [
+                "READ",
+                "WRITE",
+                "DELETE"
+              ]
+            }
+          ],
+          "is_active": true
         }
       ],
-      "subdomain": "acmeinc",
-      "created_at": "2022-02-01T00:00:00Z",
-      "updated_at": "2022-10-01T00:00:00Z",
-      "is_active": true,
-      "deleted_at": null
+      "company": [
+        {
+          "_id": "a6eafd31-6c02-4f73-be02-bfe2b511da06",
+          "name": "Barry, Spencer and Thomas",
+          "address": "8259 Anthony Forks Apt. 210",
+          "city": "East Erinburgh",
+          "state": "Oregon",
+          "zip_code": "36045",
+          "country": "Fiji",
+          "website_url": "https://weaver.info/",
+          "logo_url": "https://placekitten.com/91/437",
+          "industry": "management",
+          "registration_number": "9948162247684",
+          "vat_number": "5541761218945",
+          "operating_hours": "Agree site part near million. Increase call remember short third effect. Discussion all ability indeed especially north power sign.",
+          "is_active": false
+        }
+      ],
+      "payment_details": [
+        {
+          "_id": "eabc630d-6526-41cd-bac3-983d99d6c98f",
+          "payment_method": "Discover",
+          "card_number": "4904123397165407",
+          "exp_month": 2,
+          "exp_year": 5,
+          "security_code": "176",
+          "billing_address": "25134 Miller Ferry\nStewartville, AR 65451",
+          "billing_email": "baldwinjeremy@example.net",
+          "is_active": false
+        }
+      ],
+      "subscription_details": {
+        "_id": "5dc27b6f-6963-419d-865b-b1a2777b3537",
+        "plan": "time",
+        "start_date": "2022-02-01T00:00:00Z",
+        "end_date": "2022-02-01T00:00:00Z",
+        "active": false,
+        "billing_cycle": "dog",
+        "trial_end_date": "2022-02-01T00:00:00Z",
+        "next_billing_date": "2022-02-01T00:00:00Z",
+        "payment_status": "arrive",
+        "discount": true,
+        "discount_rate": 49,
+        "auto_renew": true,
+        "last_payment_date": "2022-02-01T00:00:00Z",
+        "payment_gateway": "draw",
+        "is_active": true
+      },
+      "deleted_at": null,
+      "tenant_metadata": {
+        "_id": "00f41347-2e7c-4bf1-9328-283ba3e473c6",
+        "database_name": "expect",
+        "database_type": "key",
+        "storage_quota": 79,
+        "storage_used": 88,
+        "api_key": "fe7fbbda-0bc1-4c1a-b544-e641f99cf9aa",
+        "time_zone": "Africa/Douala",
+        "created_at": "2022-02-01T00:00:00Z",
+        "updated_at": "2022-02-01T00:00:00Z"
+      }
     }
   }
 ]

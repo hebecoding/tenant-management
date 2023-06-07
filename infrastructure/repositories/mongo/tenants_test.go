@@ -252,7 +252,7 @@ func TestTenantRepository_UpdateTenant(t *testing.T) {
 	for _, tt := range tests {
 		newTenant := &entities.Tenant{}
 		var testValues struct {
-			PaymentDetails *entities.TenantPaymentDetails `json:"payment_details"`
+			PaymentDetails []*entities.TenantPaymentDetails `json:"payment_details"`
 		}
 
 		vals, err := json.Marshal(tt.UpdatedValues)

@@ -1,18 +1,21 @@
 [
   {
     "name": "Update Tenant: Happy Path: Update Tenant Payment Details",
-    "tenantID": "a79b76ae-f8cc-4538-b290-8a2ac0103b25",
+    "tenantID": "99f40c60-8f2a-4b2d-923a-fe31431bbd6d",
     "updatedValues": {
-      "payment_details": {
-        "_id": "fcede7ac-6d9d-4e8b-b708-4053bc48aedc",
-        "payment_method": "Discover",
-        "card_number": "213158991560177",
-        "exp_month": 11,
-        "exp_year": 4,
-        "security_code": "357",
-        "billing_address": "10392 Gallegos Pine\nNorth Natalieside, AS 98702",
-        "billing_email": "angiegarner@example.net"
-      }
+      "payment_details": [
+        {
+          "_id": "bb6b7d43-75ec-4284-8128-ba72bab9e287",
+          "payment_method": "Mastercard",
+          "card_number": "5110003255697088",
+          "exp_month": 9,
+          "exp_year": 6,
+          "security_code": "703",
+          "billing_address": "90384 Craig Loaf Suite 007\nWest Joshuaport, VT 51574",
+          "billing_email": "smithchristopher@example.org",
+          "is_active": false
+        }
+      ]
     },
     "expectedError": ""
   }
