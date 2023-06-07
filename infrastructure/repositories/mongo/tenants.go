@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"time"
 
 	"github.com/hebecoding/digital-dash-commons/utils"
 	"github.com/hebecoding/tenant-management/infrastructure/apperrors"
@@ -38,30 +39,29 @@ func (r *TenantRepository) Create(ctx context.Context, tenant *entities.Tenant) 
 	return nil
 }
 
-// GetTenants returns a list of tenants from the database.
+// DeleteTenant deletes a tenant from the database.
 // Ctx is used to cancel the operation if the context is cancelled.
-func (r *TenantRepository) GetTenants(ctx context.Context) ([]*entities.Tenant, error) {
-	var tenants []*entities.Tenant
+// ID is the id of the tenant to be deleted.
+// This is a soft delete, isActive is set to false.
+func (r *TenantRepository) DeleteTenant(ctx context.Context, id string) error {
+	var tenant *entities.Tenant
 
-	// get all tenants from database
-	r.logger.Infoln("retrieving tenants from database")
-	cursor, err := r.db.Find(ctx, bson.D{})
+	r.logger.Infof("deleting tenant from database: %v", id)
+	tenant, err := r.GetTenantByID(ctx, id)
 	if err != nil {
-		r.logger.Error(apperrors.ErrRetrievingTenants)
-		r.logger.Error(err)
-		return nil, apperrors.ErrRetrievingTenantDocument
+		return err
 	}
 
-	// unmarshal all tenants into a slice
-	if err := cursor.All(ctx, &tenants); err != nil {
-		r.logger.Error(apperrors.ErrUnmarshallingTenant)
-		r.logger.Error(err)
-		return nil, apperrors.ErrUnmarshallingTenantDocument
+	// set isActive to false
+	tenant.IsActive = false
+	tenant.DeletedAt = time.Now()
+
+	// update tenant in database
+	if err := r.UpdateTenant(ctx, tenant); err != nil {
+		return err
 	}
 
-	r.logger.Infof("found %d tenants", len(tenants))
-
-	return tenants, nil
+	return nil
 }
 
 // GetTenantByID returns a tenant from the database.
@@ -90,20 +90,36 @@ func (r *TenantRepository) GetTenantByID(ctx context.Context, id string) (*entit
 	return tenant, nil
 }
 
-func (r *TenantRepository) DeleteTenant(ctx context.Context, id string) error {
-	r.logger.Infof("deleting tenant from database: %v", id)
+// GetTenants returns a list of tenants from the database.
+// Ctx is used to cancel the operation if the context is cancelled.
+func (r *TenantRepository) GetTenants(ctx context.Context) ([]*entities.Tenant, error) {
+	var tenants []*entities.Tenant
 
-	result, err := r.db.DeleteOne(ctx, bson.M{"_id.id": id})
+	// get all tenants from database
+	r.logger.Infoln("retrieving tenants from database")
+	cursor, err := r.db.Find(ctx, bson.D{{"is_active", false}})
 	if err != nil {
-		r.logger.Errorf(apperrors.ErrDeletingTenant, id)
+		r.logger.Error(apperrors.ErrRetrievingTenants)
 		r.logger.Error(err)
-		return apperrors.ErrDeletingTenantDocument
+		return nil, apperrors.ErrRetrievingTenantDocument
 	}
 
-	r.logger.Infof("deleted %v documents", result.DeletedCount)
-	return nil
+	// unmarshal all tenants into a slice
+	if err := cursor.All(ctx, &tenants); err != nil {
+		r.logger.Error(apperrors.ErrUnmarshallingTenant)
+		r.logger.Error(err)
+		return nil, apperrors.ErrUnmarshallingTenantDocument
+	}
+
+	r.logger.Infof("found %d tenants", len(tenants))
+
+	return tenants, nil
 }
 
+// UpdateTenant updates a tenant in the database.
+// Ctx is used to cancel the operation if the context is cancelled.
+// Tenant is the tenant to be updated.
+// Only included fields will be updated.
 func (r *TenantRepository) UpdateTenant(ctx context.Context, tenant *entities.Tenant) error {
 	r.logger.Infof("updating tenant in database: %v", tenant.ID)
 	result, err := r.db.UpdateOne(

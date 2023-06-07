@@ -17,7 +17,7 @@ type Tenant struct {
 	CreatedAt       time.Time                  `json:"created_at" bson:"created_at"`
 	UpdatedAt       time.Time                  `json:"updated_at" bson:"updated_at"`
 	IsActive        bool                       `json:"is_active" bson:"is_active"`
-	DeletedAt       *time.Time                 `json:"deleted_at" bson:"deleted_at"`
+	DeletedAt       time.Time                  `json:"deleted_at" bson:"deleted_at"`
 	UpdatedBy       string                     `json:"updated_by,omitempty" bson:"updated_by"`
 }
 
