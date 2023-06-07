@@ -1,7 +1,7 @@
 [
   {
     "name": "Get a Tenant by ID: Happy Path",
-    "tenantID": "12433cb6-5d21-4f4b-b90a-cfbeed2d86fe",
+    "tenantID": "115fc051-e627-400f-8a21-e6c40d3dbf83",
     "expectedError": ""
     },
   {

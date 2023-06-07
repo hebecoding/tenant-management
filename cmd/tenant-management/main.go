@@ -15,6 +15,7 @@ import (
 func main() {
 	// init logger
 	logger := utils.NewLogger()
+	defer logger.Sync()
 
 	// read in configs
 	if err := config.ReadInConfig(logger); err != nil {

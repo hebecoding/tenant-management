@@ -8,8 +8,8 @@ import (
 
 type Tenant struct {
 	ID              utils.XID                  `json:"_id" bson:"_id"`
-	Company         *TenantCompanyDetails      `json:"company" bson:"company"`
-	PaymentDetails  *TenantPaymentDetails      `json:"payment_details" bson:"payment_details"`
+	Company         []*TenantCompanyDetails    `json:"company" bson:"company"`
+	PaymentDetails  []*TenantPaymentDetails    `json:"payment_details" bson:"payment_details"`
 	Subscription    *TenantSubscriptionDetails `json:"subscription_details" bson:"subscription_details"`
 	TenantMetadata  *TenantMetadata            `json:"tenant_metadata" bson:"tenant_metadata"`
 	PrimaryContacts []*TenantContactDetails    `json:"primary_contacts" bson:"primary_contacts"`
@@ -30,6 +30,7 @@ type TenantPaymentDetails struct {
 	SecurityCode   string    `json:"security_code" bson:"security_code"`
 	BillingAddress string    `json:"billing_address" bson:"billing_address"`
 	BillingEmail   string    `json:"billing_email" bson:"billing_email"`
+	IsActive       bool      `json:"is_active" bson:"is_active"`
 }
 
 type TenantCompanyDetails struct {
@@ -46,6 +47,7 @@ type TenantCompanyDetails struct {
 	RegistrationNumber string    `json:"registration_number" bson:"registration_number"`
 	VATNumber          string    `json:"vat_number" bson:"vat_number"`
 	OperatingHours     string    `json:"operating_hours" bson:"operating_hours"`
+	IsActive           bool      `json:"is_active" bson:"is_active"`
 }
 
 type TenantContactDetails struct {
@@ -60,6 +62,7 @@ type TenantContactDetails struct {
 	PreferredLanguage string    `json:"preferred_language" bson:"preferred_language"`
 	Timezone          string    `json:"timezone" bson:"timezone"`
 	Roles             []*Role   `json:"roles" bson:"roles"`
+	IsActive          bool      `json:"is_active" bson:"is_active"`
 }
 
 type TenantSubscriptionDetails struct {
@@ -77,6 +80,7 @@ type TenantSubscriptionDetails struct {
 	AutoRenew       bool      `json:"auto_renew" bson:"auto_renew"`
 	LastPaymentDate time.Time `json:"last_payment_date" bson:"last_payment_date"`
 	PaymentGateway  string    `json:"payment_gateway" bson:"payment_gateway"`
+	IsActive        bool      `json:"is_active" bson:"is_active"`
 }
 
 type TenantMetadata struct {
