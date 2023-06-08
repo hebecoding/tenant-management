@@ -12,4 +12,6 @@ type TenantRepository interface {
 	GetTenantByID(ctx context.Context, id string) (*entities.Tenant, error)
 	GetTenants(ctx context.Context) ([]*entities.Tenant, error)
 	UpdateTenant(ctx context.Context, tenant *entities.Tenant) error
+	SearchTenant(ctx context.Context, filter map[string]any) (*entities.Tenant, error)
+	SearchTenants(ctx context.Context, filter map[string]any) ([]*entities.Tenant, error)
 }

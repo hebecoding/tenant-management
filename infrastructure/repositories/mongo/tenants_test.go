@@ -13,6 +13,7 @@ import (
 	"github.com/hebecoding/tenant-management/internal/domain/entities"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
+	"go.mongodb.org/mongo-driver/bson"
 	mgo "go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -325,6 +326,52 @@ func TestTenantRepository_DeleteTenant(t *testing.T) {
 				if gotErr := storage.Repo.DeleteTenant(ctx, tt.TenantID); gotErr != expectedErr {
 					assert.ErrorContains(t, gotErr, expectedErr.Error())
 				}
+			},
+		)
+	}
+
+}
+
+func TestTenantRepository_SearchTenant(t *testing.T) {
+	// read in test data from testData
+	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-search.json")
+	assert.Nil(t, err)
+	defer testFile.Close()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	var tests []struct {
+		Name          string
+		TenantID      string
+		PaymentID     string
+		ExpectedError string
+	}
+
+	// decode test data
+	decoder := json.NewDecoder(testFile)
+	_ = decoder.Decode(&tests)
+
+	// run test cases
+	for _, tt := range tests {
+		t.Run(
+			tt.Name, func(t *testing.T) {
+				var expectedErr error
+				if tt.ExpectedError != "" {
+					expectedErr = errors.New(tt.ExpectedError)
+				}
+
+				expectedTenant, err := storage.Repo.GetTenantByID(ctx, tt.TenantID)
+				assert.Nil(t, err)
+
+				filter := bson.M{"payment_details._id.id": tt.PaymentID}
+
+				gotTenant, gotErr := storage.Repo.SearchTenant(ctx, filter)
+				if gotErr != expectedErr {
+					assert.ErrorContains(t, gotErr, expectedErr.Error())
+				}
+
+				assert.EqualValues(t, expectedTenant, gotTenant)
 			},
 		)
 	}

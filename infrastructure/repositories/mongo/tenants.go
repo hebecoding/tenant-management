@@ -137,3 +137,25 @@ func (r *TenantRepository) UpdateTenant(ctx context.Context, tenant *entities.Te
 
 	return nil
 }
+
+func (r *TenantRepository) SearchTenant(ctx context.Context, filter map[string]interface{}) (*entities.Tenant, error) {
+	var tenant *entities.Tenant
+
+	// get tenant from database
+	r.logger.Infof("retrieving tenant document from database with filter: %v", filter)
+	if err := r.db.FindOne(
+		ctx, filter,
+	).
+		Decode(&tenant); err != nil {
+		switch err {
+		case mongo.ErrNoDocuments:
+			r.logger.With(filter).Info(apperrors.ErrNoTenantFound)
+			return nil, apperrors.ErrNoTenantDocumentsFound
+		default:
+			r.logger.With(filter).Error(err)
+			return nil, apperrors.ErrRetrievingTenantDocument
+		}
+	}
+
+	return tenant, nil
+}
