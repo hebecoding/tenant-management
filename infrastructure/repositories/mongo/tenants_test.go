@@ -334,7 +334,7 @@ func TestTenantRepository_DeleteTenant(t *testing.T) {
 
 func TestTenantRepository_SearchTenant(t *testing.T) {
 	// read in test data from testData
-	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-search.json")
+	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-search-tenant.json")
 	assert.Nil(t, err)
 	defer testFile.Close()
 
@@ -372,6 +372,47 @@ func TestTenantRepository_SearchTenant(t *testing.T) {
 				}
 
 				assert.EqualValues(t, expectedTenant, gotTenant)
+			},
+		)
+	}
+
+}
+
+func TestTenantRepository_SearchTenants(t *testing.T) {
+	// read in test data from testData
+	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-search-tenant.json")
+	assert.Nil(t, err)
+	defer testFile.Close()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	var tests []struct {
+		Name          string
+		ExpectedError string
+	}
+
+	// decode test data
+	decoder := json.NewDecoder(testFile)
+	_ = decoder.Decode(&tests)
+
+	// run test cases
+	for _, tt := range tests {
+		t.Run(
+			tt.Name, func(t *testing.T) {
+				var expectedErr error
+				if tt.ExpectedError != "" {
+					expectedErr = errors.New(tt.ExpectedError)
+				}
+
+				filter := bson.M{"payment_details.payment_method": "VISA 13 digit"}
+
+				gotTenant, gotErr := storage.Repo.SearchTenants(ctx, filter)
+				if gotErr != expectedErr {
+					assert.ErrorContains(t, gotErr, expectedErr.Error())
+				}
+
+				assert.Len(t, gotTenant, 2)
 			},
 		)
 	}
