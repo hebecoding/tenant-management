@@ -159,3 +159,26 @@ func (r *TenantRepository) SearchTenant(ctx context.Context, filter map[string]i
 
 	return tenant, nil
 }
+func (r *TenantRepository) SearchTenants(ctx context.Context, filter map[string]interface{}) (
+	[]*entities.Tenant, error,
+) {
+	var tenants []*entities.Tenant
+
+	// get all tenants from database
+	r.logger.Infof("retrieving tenants from database with filter: %v", filter)
+	cursor, err := r.db.Find(ctx, filter)
+	if err != nil {
+		r.logger.With(filter).With(apperrors.ErrRetrievingTenants).Errorln(err)
+		return nil, apperrors.ErrRetrievingTenantDocument
+	}
+
+	// unmarshal all tenants into a slice
+	if err := cursor.All(ctx, &tenants); err != nil {
+		r.logger.With(filter).With(apperrors.ErrUnmarshallingTenant).Errorln(err)
+		return nil, apperrors.ErrUnmarshallingTenantDocument
+	}
+
+	r.logger.Infof("found %d tenants", len(tenants))
+
+	return tenants, nil
+}
