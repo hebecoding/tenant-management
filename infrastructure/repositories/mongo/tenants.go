@@ -73,7 +73,7 @@ func (r *TenantRepository) GetTenantByID(ctx context.Context, id string) (*entit
 	// get tenant from database
 	r.logger.Infof("retrieving tenant from database: %v", id)
 	if err := r.db.FindOne(
-		ctx, bson.M{"_id.id": id},
+		ctx, bson.M{"_id": id},
 	).
 		Decode(&tenant); err != nil {
 		switch err {
@@ -136,4 +136,49 @@ func (r *TenantRepository) UpdateTenant(ctx context.Context, tenant *entities.Te
 	r.logger.Infof("updated %v documents", result.ModifiedCount)
 
 	return nil
+}
+
+func (r *TenantRepository) SearchTenant(ctx context.Context, filter map[string]interface{}) (*entities.Tenant, error) {
+	var tenant *entities.Tenant
+
+	// get tenant from database
+	r.logger.Infof("retrieving tenant document from database with filter: %v", filter)
+	if err := r.db.FindOne(
+		ctx, filter,
+	).
+		Decode(&tenant); err != nil {
+		switch err {
+		case mongo.ErrNoDocuments:
+			r.logger.With(filter).Info(apperrors.ErrNoTenantFound)
+			return nil, apperrors.ErrNoTenantDocumentsFound
+		default:
+			r.logger.With(filter).Error(err)
+			return nil, apperrors.ErrRetrievingTenantDocument
+		}
+	}
+
+	return tenant, nil
+}
+func (r *TenantRepository) SearchTenants(ctx context.Context, filter map[string]interface{}) (
+	[]*entities.Tenant, error,
+) {
+	var tenants []*entities.Tenant
+
+	// get all tenants from database
+	r.logger.Infof("retrieving tenants from database with filter: %v", filter)
+	cursor, err := r.db.Find(ctx, filter)
+	if err != nil {
+		r.logger.With(filter).With(apperrors.ErrRetrievingTenants).Errorln(err)
+		return nil, apperrors.ErrRetrievingTenantDocument
+	}
+
+	// unmarshal all tenants into a slice
+	if err := cursor.All(ctx, &tenants); err != nil {
+		r.logger.With(filter).With(apperrors.ErrUnmarshallingTenant).Errorln(err)
+		return nil, apperrors.ErrUnmarshallingTenantDocument
+	}
+
+	r.logger.Infof("found %d tenants", len(tenants))
+
+	return tenants, nil
 }
