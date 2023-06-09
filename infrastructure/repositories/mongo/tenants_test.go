@@ -25,6 +25,7 @@ type TestTenantRepository struct {
 
 var storage = &TestTenantRepository{}
 var logger *utils.Logger
+var ctx = context.Background()
 
 func TestMain(m *testing.M) {
 	// initialize logger
@@ -36,7 +37,20 @@ func TestMain(m *testing.M) {
 
 	// connect to mongo test database
 	logger.Info("Connecting to mongo test database")
-	client, err := mgo.Connect(context.Background(), options.Client().ApplyURI(config.Config.DB.URL))
+
+	// connect to mongo testcontainers
+	container, err := NewMongoDBTestContainer(ctx)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	defer container.Terminate(ctx)
+
+	endpoint, err := container.Endpoint(ctx, "mongodb")
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	client, err := mgo.Connect(ctx, options.Client().ApplyURI(endpoint))
 	if err != nil {
 		logger.Infoln("error connecting to mongo test database")
 		logger.Fatal(err)
@@ -47,7 +61,7 @@ func TestMain(m *testing.M) {
 	}
 
 	defer client.Disconnect(context.Background())
-	
+
 	// create new collection for tenants
 	collection := client.Database("test_tenants").Collection("tenants")
 	storage.DB = collection
