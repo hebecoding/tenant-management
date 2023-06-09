@@ -86,12 +86,6 @@ func TestMain(m *testing.M) {
 	// run tests
 	code := m.Run()
 
-	// drop test collections
-	logger.Info("Dropping test collections")
-	if err := storage.DB.Drop(context.Background()); err != nil {
-		logger.Fatal(err)
-	}
-
 	os.Exit(code)
 
 }
@@ -364,7 +358,7 @@ func TestTenantRepository_SearchTenant(t *testing.T) {
 				expectedTenant, err := storage.Repo.GetTenantByID(ctx, tt.TenantID)
 				assert.Nil(t, err)
 
-				filter := bson.M{"payment_details._id.id": tt.PaymentID}
+				filter := bson.M{"payment_details._id": tt.PaymentID}
 
 				gotTenant, gotErr := storage.Repo.SearchTenant(ctx, filter)
 				if gotErr != expectedErr {

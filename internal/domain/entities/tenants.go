@@ -2,12 +2,10 @@ package entities
 
 import (
 	"time"
-
-	"github.com/hebecoding/digital-dash-commons/utils"
 )
 
 type Tenant struct {
-	ID              utils.XID                  `json:"_id" bson:"_id"`
+	ID              string                     `json:"_id" bson:"_id"`
 	Company         []*TenantCompanyDetails    `json:"company" bson:"company"`
 	PaymentDetails  []*TenantPaymentDetails    `json:"payment_details" bson:"payment_details"`
 	Subscription    *TenantSubscriptionDetails `json:"subscription_details" bson:"subscription_details"`
@@ -22,51 +20,51 @@ type Tenant struct {
 }
 
 type TenantPaymentDetails struct {
-	ID             utils.XID `json:"_id,omitempty" bson:"_id,omitempty"`
-	PaymentMethod  string    `json:"payment_method" bson:"payment_method"`
-	CardNumber     string    `json:"card_number" bson:"card_number"`
-	ExpMonth       int       `json:"exp_month" bson:"exp_month"`
-	ExpYear        int       `json:"exp_year" bson:"exp_year"`
-	SecurityCode   string    `json:"security_code" bson:"security_code"`
-	BillingAddress string    `json:"billing_address" bson:"billing_address"`
-	BillingEmail   string    `json:"billing_email" bson:"billing_email"`
-	IsActive       bool      `json:"is_active" bson:"is_active"`
+	ID             string `json:"_id,omitempty" bson:"_id,omitempty"`
+	PaymentMethod  string `json:"payment_method" bson:"payment_method"`
+	CardNumber     string `json:"card_number" bson:"card_number"`
+	ExpMonth       int    `json:"exp_month" bson:"exp_month"`
+	ExpYear        int    `json:"exp_year" bson:"exp_year"`
+	SecurityCode   string `json:"security_code" bson:"security_code"`
+	BillingAddress string `json:"billing_address" bson:"billing_address"`
+	BillingEmail   string `json:"billing_email" bson:"billing_email"`
+	IsActive       bool   `json:"is_active" bson:"is_active"`
 }
 
 type TenantCompanyDetails struct {
-	ID                 utils.XID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Name               string    `json:"name" bson:"company_name"`
-	Address            string    `json:"address" bson:"address"`
-	City               string    `json:"city" bson:"city"`
-	State              string    `json:"state" bson:"state"`
-	ZipCode            string    `json:"zip_code" bson:"zip_code"`
-	Country            string    `json:"country" bson:"country"`
-	WebsiteURL         string    `json:"website_url" bson:"website_url"`
-	LogoURL            string    `json:"logo_url" bson:"logo_url"`
-	Industry           string    `json:"industry" bson:"industry"`
-	RegistrationNumber string    `json:"registration_number" bson:"registration_number"`
-	VATNumber          string    `json:"vat_number" bson:"vat_number"`
-	OperatingHours     string    `json:"operating_hours" bson:"operating_hours"`
-	IsActive           bool      `json:"is_active" bson:"is_active"`
+	ID                 string `json:"_id,omitempty" bson:"_id,omitempty"`
+	Name               string `json:"name" bson:"company_name"`
+	Address            string `json:"address" bson:"address"`
+	City               string `json:"city" bson:"city"`
+	State              string `json:"state" bson:"state"`
+	ZipCode            string `json:"zip_code" bson:"zip_code"`
+	Country            string `json:"country" bson:"country"`
+	WebsiteURL         string `json:"website_url" bson:"website_url"`
+	LogoURL            string `json:"logo_url" bson:"logo_url"`
+	Industry           string `json:"industry" bson:"industry"`
+	RegistrationNumber string `json:"registration_number" bson:"registration_number"`
+	VATNumber          string `json:"vat_number" bson:"vat_number"`
+	OperatingHours     string `json:"operating_hours" bson:"operating_hours"`
+	IsActive           bool   `json:"is_active" bson:"is_active"`
 }
 
 type TenantContactDetails struct {
-	ID                utils.XID `json:"_id" bson:"_id"`
-	FirstName         string    `json:"first_name" bson:"first_name"`
-	LastName          string    `json:"last_name" bson:"last_name"`
-	Email             string    `json:"email" bson:"email"`
-	UserID            utils.XID `json:"user_id" bson:"user_id"`
-	PhoneNumber       string    `json:"phone_number" bson:"phone_number"`
-	AvatarURL         string    `json:"avatar_url" bson:"avatar_url"`
-	JobTitle          string    `json:"job_title" bson:"job_title"`
-	PreferredLanguage string    `json:"preferred_language" bson:"preferred_language"`
-	Timezone          string    `json:"timezone" bson:"timezone"`
-	Roles             []*Role   `json:"roles" bson:"roles"`
-	IsActive          bool      `json:"is_active" bson:"is_active"`
+	ID                string  `json:"_id" bson:"_id"`
+	FirstName         string  `json:"first_name" bson:"first_name"`
+	LastName          string  `json:"last_name" bson:"last_name"`
+	Email             string  `json:"email" bson:"email"`
+	UserID            string  `json:"user_id" bson:"user_id"`
+	PhoneNumber       string  `json:"phone_number" bson:"phone_number"`
+	AvatarURL         string  `json:"avatar_url" bson:"avatar_url"`
+	JobTitle          string  `json:"job_title" bson:"job_title"`
+	PreferredLanguage string  `json:"preferred_language" bson:"preferred_language"`
+	Timezone          string  `json:"timezone" bson:"timezone"`
+	Roles             []*Role `json:"roles" bson:"roles"`
+	IsActive          bool    `json:"is_active" bson:"is_active"`
 }
 
 type TenantSubscriptionDetails struct {
-	ID              utils.XID `json:"_id" bson:"_id"`
+	ID              string    `json:"_id" bson:"_id"`
 	Plan            string    `json:"plan" bson:"plan"`
 	StartDate       time.Time `json:"start_date" bson:"start_date"`
 	EndDate         time.Time `json:"end_date" bson:"end_date"`
@@ -84,7 +82,7 @@ type TenantSubscriptionDetails struct {
 }
 
 type TenantMetadata struct {
-	ID           utils.XID `json:"_id" bson:"_id"`
+	ID           string    `json:"_id" bson:"_id"`
 	DatabaseName string    `json:"database_name" bson:"database_name"`
 	DatabaseType string    `json:"database_type" bson:"database_type"`
 	StorageQuota int64     `json:"storage_quota" bson:"storage_quota"`

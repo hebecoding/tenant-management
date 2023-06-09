@@ -73,7 +73,7 @@ func (r *TenantRepository) GetTenantByID(ctx context.Context, id string) (*entit
 	// get tenant from database
 	r.logger.Infof("retrieving tenant from database: %v", id)
 	if err := r.db.FindOne(
-		ctx, bson.M{"_id.id": id},
+		ctx, bson.M{"_id": id},
 	).
 		Decode(&tenant); err != nil {
 		switch err {
