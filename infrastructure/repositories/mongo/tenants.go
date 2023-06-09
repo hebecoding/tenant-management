@@ -13,10 +13,10 @@ import (
 
 type TenantRepository struct {
 	db     *mongo.Collection
-	logger *utils.Logger
+	logger utils.LoggerInterface
 }
 
-func NewTenantRepository(db *mongo.Collection, logger *utils.Logger) *TenantRepository {
+func NewTenantRepository(db *mongo.Collection, logger utils.LoggerInterface) *TenantRepository {
 	return &TenantRepository{
 		db:     db,
 		logger: logger,
@@ -96,7 +96,7 @@ func (r *TenantRepository) GetTenants(ctx context.Context) ([]*entities.Tenant, 
 	var tenants []*entities.Tenant
 
 	// get all tenants from database
-	r.logger.Infoln("retrieving tenants from database")
+	r.logger.Info("retrieving tenants from database")
 	cursor, err := r.db.Find(ctx, bson.D{{"is_active", false}})
 	if err != nil {
 		r.logger.Error(apperrors.ErrRetrievingTenants)
@@ -171,6 +171,8 @@ func (r *TenantRepository) SearchTenants(ctx context.Context, filter map[string]
 		r.logger.With(filter).With(apperrors.ErrRetrievingTenants).Errorln(err)
 		return nil, apperrors.ErrRetrievingTenantDocument
 	}
+
+	defer cursor.Close(ctx)
 
 	// unmarshal all tenants into a slice
 	if err := cursor.All(ctx, &tenants); err != nil {

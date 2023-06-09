@@ -47,8 +47,8 @@ func TestMain(m *testing.M) {
 	}
 
 	defer client.Disconnect(context.Background())
-
-	// create new test collection for tenants
+	
+	// create new collection for tenants
 	collection := client.Database("test_tenants").Collection("tenants")
 	storage.DB = collection
 
