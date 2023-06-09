@@ -13,15 +13,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    services:
-      mongodb:
-        image: mongo:${{ matrix.mongodb-version }}
-        ports:
-          - 27017:27017
-        env:
-          MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: rootpassword
-
     steps:
       - name: Checkout Github Repo
         uses: actions/checkout@v3
