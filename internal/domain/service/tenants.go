@@ -26,3 +26,7 @@ func NewTenantService(
 func (s *TenantService) CreateTenant(ctx context.Context, tenant *entities.Tenant) error {
 	return s.Repository.CreateTenant(ctx, tenant)
 }
+
+func (s *TenantService) GetTenantByID(ctx context.Context, id string) (*entities.Tenant, error) {
+	return s.Repository.GetTenantByID(ctx, id)
+}
