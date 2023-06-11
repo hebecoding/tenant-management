@@ -111,7 +111,7 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func TestCreateTenant(t *testing.T) {
+func TestTenantService_CreateTenant(t *testing.T) {
 	// read in test data
 	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-create.json")
 	assert.NoError(t, err)
@@ -156,7 +156,7 @@ func TestCreateTenant(t *testing.T) {
 	}
 }
 
-func TestGetTenantByID(t *testing.T) {
+func TestTenantService_GetTenantByID(t *testing.T) {
 	// read in test data
 	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-get-by-id.json")
 	assert.NoError(t, err)
@@ -200,5 +200,57 @@ func TestGetTenantByID(t *testing.T) {
 			},
 		)
 	}
+}
 
+func TestTenantService_UpdateTenant(t *testing.T) {
+	// read in test data
+	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-update.json")
+	if err != nil {
+		logger.Error(err)
+	}
+	defer file.Close()
+
+	var tests []struct {
+		Name          string
+		TenantID      string
+		UpdatedValues map[string]any
+		ExpectedError string
+	}
+
+	decoder := json.NewDecoder(file)
+	if err = decoder.Decode(&tests); err != nil {
+		logger.Error(err)
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.Name, func(t *testing.T) {
+
+				var expectedErr error
+				if tt.ExpectedError != "" {
+					expectedErr = errors.New(tt.ExpectedError)
+				}
+
+				ctx, cancel := context.WithCancel(context.Background())
+				defer cancel()
+
+				tenant := &entities.Tenant{}
+				vals, err := json.Marshal(tt.UpdatedValues)
+				if err != nil {
+					logger.Error(err)
+				}
+
+				if err := json.Unmarshal(vals, tenant); err != nil {
+					logger.Error(err)
+				}
+
+				err = service.Service.UpdateTenant(ctx, tt.TenantID, tenant)
+				if expectedErr != nil && err != nil {
+					assert.Equal(t, expectedErr.Error(), err.Error())
+				} else {
+					assert.Equal(t, expectedErr, err)
+				}
+			},
+		)
+	}
 }
