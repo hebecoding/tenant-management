@@ -30,3 +30,8 @@ func (s *TenantService) CreateTenant(ctx context.Context, tenant *entities.Tenan
 func (s *TenantService) GetTenantByID(ctx context.Context, id string) (*entities.Tenant, error) {
 	return s.Repository.GetTenantByID(ctx, id)
 }
+
+func (s *TenantService) UpdateTenant(ctx context.Context, id string, tenant *entities.Tenant) error {
+	tenant.ID = id
+	return s.Repository.UpdateTenant(ctx, tenant)
+}
