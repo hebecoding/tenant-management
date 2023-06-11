@@ -34,12 +34,14 @@ const (
 	Prod  = "prod"
 )
 
-func ReadInConfig(logger *utils.Logger) error {
+func ReadInConfig(logger utils.LoggerInterface) error {
+	//TODO: refactor to make more dynamic
 	viper.AutomaticEnv()
 	viper.SetConfigName("application")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("infrastructure/config")
+	viper.AddConfigPath("../../../infrastructure/config")
 	viper.AddConfigPath("./config")
 	viper.AddConfigPath("../../config")
 	viper.AddConfigPath(".././../config")

@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/hebecoding/digital-dash-commons/utils"
+	"github.com/hebecoding/tenant-management/helpers"
 	"github.com/hebecoding/tenant-management/infrastructure/config"
 	"github.com/hebecoding/tenant-management/infrastructure/repositories/mongo"
 	"github.com/hebecoding/tenant-management/internal/domain/entities"
@@ -24,7 +25,7 @@ type TestTenantRepository struct {
 }
 
 var storage = &TestTenantRepository{}
-var logger *utils.Logger
+var logger utils.LoggerInterface
 var ctx = context.Background()
 
 func TestMain(m *testing.M) {
@@ -52,7 +53,7 @@ func TestMain(m *testing.M) {
 
 	client, err := mgo.Connect(ctx, options.Client().ApplyURI(endpoint))
 	if err != nil {
-		logger.Infoln("error connecting to mongo test database")
+		logger.Info("error connecting to mongo test database")
 		logger.Fatal(err)
 	}
 
@@ -77,7 +78,7 @@ func TestMain(m *testing.M) {
 
 	// create test tenants
 	logger.Info("Creating test tenants")
-	file, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-mock-data.json")
+	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-mock-data.json")
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -106,12 +107,12 @@ func TestMain(m *testing.M) {
 
 func TestTenantRepository_Create(t *testing.T) {
 	// read in test data from file
-	file, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-create.json")
+	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-create.json")
 	if err != nil {
 		assert.Nil(t, err)
 	}
 
-	logger.Infoln("Successfully read in test data from file")
+	logger.Info("Successfully read in test data from file")
 	defer file.Close()
 
 	var tests []struct {
@@ -145,7 +146,7 @@ func TestTenantRepository_Create(t *testing.T) {
 				}
 
 				// when
-				if gotErr := storage.Repo.Create(ctx, tt.Tenant); gotErr != expectedErr {
+				if gotErr := storage.Repo.CreateTenant(ctx, tt.Tenant); gotErr != expectedErr {
 					assert.Equal(t, expectedErr, gotErr)
 				}
 			},
@@ -156,7 +157,7 @@ func TestTenantRepository_Create(t *testing.T) {
 
 func TestTenantRepository_GetTenants(t *testing.T) {
 	// read in test data from file
-	file, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-get-tenants.json")
+	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-get-tenants.json")
 	if err != nil {
 		assert.Nil(t, err)
 	}
@@ -199,7 +200,7 @@ func TestTenantRepository_GetTenants(t *testing.T) {
 }
 
 func TestTenantRepository_GetTenantByID(t *testing.T) {
-	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-get-by-id.json")
+	testFile, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-get-by-id.json")
 	if err != nil {
 		assert.Nil(t, err)
 	}
@@ -238,7 +239,7 @@ func TestTenantRepository_GetTenantByID(t *testing.T) {
 
 func TestTenantRepository_UpdateTenant(t *testing.T) {
 	// read in test data from testData
-	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-update.json")
+	testFile, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-update.json")
 	if err != nil {
 		assert.Nil(t, err)
 	}
@@ -305,7 +306,7 @@ func TestTenantRepository_UpdateTenant(t *testing.T) {
 
 func TestTenantRepository_DeleteTenant(t *testing.T) {
 	// read in test data from testData
-	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-delete.json")
+	testFile, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-delete.json")
 	assert.Nil(t, err)
 	defer testFile.Close()
 
@@ -342,7 +343,9 @@ func TestTenantRepository_DeleteTenant(t *testing.T) {
 
 func TestTenantRepository_SearchTenant(t *testing.T) {
 	// read in test data from testData
-	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-search-tenant.json")
+	testFile, err := helpers.ReadInJSONTestDataFile(
+		logger, "../../../tests/test-data/storage/tenant-search-tenant.json",
+	)
 	assert.Nil(t, err)
 	defer testFile.Close()
 
@@ -388,7 +391,9 @@ func TestTenantRepository_SearchTenant(t *testing.T) {
 
 func TestTenantRepository_SearchTenants(t *testing.T) {
 	// read in test data from testData
-	testFile, err := readInJSONTestDataFile("../../../tests/test-data/storage/tenant-search-tenant.json")
+	testFile, err := helpers.ReadInJSONTestDataFile(
+		logger, "../../../tests/test-data/storage/tenant-search-tenant.json",
+	)
 	assert.Nil(t, err)
 	defer testFile.Close()
 
@@ -425,16 +430,4 @@ func TestTenantRepository_SearchTenants(t *testing.T) {
 		)
 	}
 
-}
-
-func readInJSONTestDataFile(path string) (*os.File, error) {
-	// read in test data from file
-	logger.Info("Reading in test data from file")
-	file, err := os.Open(path)
-	if err != nil {
-		logger.Error("error opening file in path: ", path)
-		return nil, errors.Wrap(err, "error opening test data file")
-	}
-	logger.Info("Successfully read in test data from file")
-	return file, nil
 }
