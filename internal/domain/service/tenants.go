@@ -1,7 +1,10 @@
 package service
 
 import (
+	"context"
+
 	"github.com/hebecoding/digital-dash-commons/utils"
+	"github.com/hebecoding/tenant-management/internal/domain/entities"
 	"github.com/hebecoding/tenant-management/internal/domain/repository"
 )
 
@@ -11,11 +14,15 @@ type TenantService struct {
 }
 
 func NewTenantService(
-	repository repository.TenantRepository,
 	logger utils.LoggerInterface,
+	repository repository.TenantRepository,
 ) *TenantService {
 	return &TenantService{
 		Repository: repository,
 		Logger:     logger,
 	}
+}
+
+func (s *TenantService) CreateTenant(ctx context.Context, tenant *entities.Tenant) error {
+	return s.Repository.CreateTenant(ctx, tenant)
 }

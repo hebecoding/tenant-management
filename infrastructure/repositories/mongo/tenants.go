@@ -23,10 +23,10 @@ func NewTenantRepository(db *mongo.Collection, logger utils.LoggerInterface) *Te
 	}
 }
 
-// Create creates a new tenant in the database.
+// CreateTenant creates a new tenant in the database.
 // Ctx is used to cancel the operation if the context is cancelled.
 // Tenants is the tenant to be created.
-func (r *TenantRepository) Create(ctx context.Context, tenant *entities.Tenant) error {
+func (r *TenantRepository) CreateTenant(ctx context.Context, tenant *entities.Tenant) error {
 	r.logger.Infof("inserting tenant into database: %v", tenant.ID)
 	_, err := r.db.InsertOne(ctx, tenant)
 	if err != nil {
@@ -36,6 +36,7 @@ func (r *TenantRepository) Create(ctx context.Context, tenant *entities.Tenant) 
 
 		return apperrors.ErrCreatingTenantDocument
 	}
+	r.logger.Infof("successfully inserted tenant into database: %v", tenant.ID)
 	return nil
 }
 
@@ -138,6 +139,9 @@ func (r *TenantRepository) UpdateTenant(ctx context.Context, tenant *entities.Te
 	return nil
 }
 
+// SearchTenant returns a tenant from the database.
+// Ctx is used to cancel the operation if the context is cancelled.
+// Filter is the filter to be applied to the search.
 func (r *TenantRepository) SearchTenant(ctx context.Context, filter map[string]interface{}) (*entities.Tenant, error) {
 	var tenant *entities.Tenant
 
@@ -159,6 +163,10 @@ func (r *TenantRepository) SearchTenant(ctx context.Context, filter map[string]i
 
 	return tenant, nil
 }
+
+// SearchTenants returns a list of tenants from the database.
+// Ctx is used to cancel the operation if the context is cancelled.
+// Filter is the filter to be applied to the search.
 func (r *TenantRepository) SearchTenants(ctx context.Context, filter map[string]interface{}) (
 	[]*entities.Tenant, error,
 ) {

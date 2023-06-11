@@ -7,7 +7,7 @@ import (
 )
 
 type TenantRepository interface {
-	Create(ctx context.Context, tenant *entities.Tenant) error
+	CreateTenant(ctx context.Context, tenant *entities.Tenant) error
 	DeleteTenant(ctx context.Context, id string) error
 	GetTenantByID(ctx context.Context, id string) (*entities.Tenant, error)
 	GetTenants(ctx context.Context) ([]*entities.Tenant, error)
