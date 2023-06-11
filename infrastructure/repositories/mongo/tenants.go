@@ -59,7 +59,8 @@ func (r *TenantRepository) DeleteTenant(ctx context.Context, id string) error {
 
 	// update tenant in database
 	if err := r.UpdateTenant(ctx, tenant); err != nil {
-		return err
+		r.logger.With(tenant.ID).Error(err)
+		return apperrors.ErrDeletingTenantDocument
 	}
 
 	return nil
