@@ -39,3 +39,7 @@ func (s *TenantService) UpdateTenant(ctx context.Context, id string, tenant *ent
 func (s *TenantService) DeleteTenant(ctx context.Context, id string) error {
 	return s.Repository.DeleteTenant(ctx, id)
 }
+
+func (s *TenantService) GetTenants(ctx context.Context) ([]*entities.Tenant, error) {
+	return s.Repository.GetTenants(ctx)
+}

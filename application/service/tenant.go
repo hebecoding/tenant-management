@@ -15,7 +15,7 @@ type TenantService interface {
 	GetTenantPaymentDetails(ctx context.Context, id string) ([]*entities.TenantPaymentDetails, error)
 	GetTenantByPaymentID(ctx context.Context, paymentID string) (*entities.Tenant, error)
 	GetTenantSubscription(ctx context.Context, id string) (*entities.TenantSubscriptionDetails, error)
-	ListTenants(ctx context.Context) ([]*entities.Tenant, error)
+	GetTenants(ctx context.Context) ([]*entities.Tenant, error)
 	UpdateTenant(ctx context.Context, id string, tenant *entities.Tenant) error
 	UpdateTenantCompany(ctx context.Context, id string, company *entities.TenantCompanyDetails) error
 	UpdateTenantSubscription(ctx context.Context, id string, subscription *entities.TenantSubscriptionDetails) error
