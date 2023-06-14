@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Get Tenant Companies: Happy Path",
+    "tenantID": "115fc051-e627-400f-8a21-e6c40d3dbf83",
+    "expectedError": ""
+    },
+  {
+    "name": "Get a Tenant Companies: Tenant Not Found",
+    "tenantID": "a79b76ae-f8cc-4538-b290-8a2ac0103b26",
+    "expectedError": "error retrieving tenant document(s) from database"
+    },
+  {
+    "name": "Get a Tenant Companies: No Tenant Companies Found",
+    "tenantID": "860a894e-dfde-49de-84e9-6b6b5ac25deb",
+    "expectedError": "no tenant documents found"
+  }
+]

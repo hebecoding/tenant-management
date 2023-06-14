@@ -335,3 +335,44 @@ func TestTenantService_GetTenants(t *testing.T) {
 		)
 	}
 }
+
+func TestTenantService_GetTenantCompanies(t *testing.T) {
+	// read in test data
+	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-get-companies.json")
+	if err != nil {
+		logger.Error(err)
+	}
+	defer file.Close()
+
+	var tests []struct {
+		Name          string
+		TenantID      string
+		ExpectedError string
+	}
+
+	decoder := json.NewDecoder(file)
+	if err = decoder.Decode(&tests); err != nil {
+		logger.Error(err)
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.Name, func(t *testing.T) {
+				var expectedErr error
+				if tt.ExpectedError != "" {
+					expectedErr = errors.New(tt.ExpectedError)
+				}
+
+				ctx, cancel := context.WithCancel(context.Background())
+				defer cancel()
+
+				_, err = service.Service.GetTenantCompanies(ctx, tt.TenantID)
+				if expectedErr != nil && err != nil {
+					assert.Equal(t, expectedErr.Error(), err.Error())
+				} else {
+					assert.Equal(t, expectedErr, err)
+				}
+			},
+		)
+	}
+}

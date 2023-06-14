@@ -6,7 +6,7 @@ import (
 
 type Tenant struct {
 	ID              string                     `json:"_id" bson:"_id"`
-	Company         []*TenantCompanyDetails    `json:"company" bson:"company"`
+	Companies       []*TenantCompanyDetails    `json:"companies" bson:"companies"`
 	PaymentDetails  []*TenantPaymentDetails    `json:"payment_details" bson:"payment_details"`
 	Subscription    *TenantSubscriptionDetails `json:"subscription_details" bson:"subscription_details"`
 	TenantMetadata  *TenantMetadata            `json:"tenant_metadata" bson:"tenant_metadata"`

@@ -57,7 +57,7 @@
         "is_active": false
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "ae6d908f-664b-47ba-a4e7-af9c9c6dd4d3",
         "name": "Drake Inc",
@@ -176,7 +176,7 @@
         "is_active": true
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "f8e68830-117f-40bb-801b-54f7df611d2d",
         "name": "Patterson-Flores",
@@ -295,7 +295,7 @@
         "is_active": false
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "e09bbf6e-c51e-4538-aaf8-ae20e78bcb2f",
         "name": "Bauer, Shah and Garner",
@@ -414,7 +414,7 @@
         "is_active": true
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "6abfacb9-3b7f-4f5b-a5e4-a980d2931e5c",
         "name": "Walters-Cochran",
@@ -533,7 +533,7 @@
         "is_active": true
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "05f15aab-86af-4ca9-923f-c295615faf5a",
         "name": "Myers-Rodgers",
@@ -652,23 +652,7 @@
         "is_active": false
       }
     ],
-    "company": [
-      {
-        "_id": "8b0933f1-4048-4288-9de1-cd2491293862",
-        "name": "Mathews, Bowers and Turner",
-        "address": "631 Kayla Garden Suite 077",
-        "city": "South Cynthiaton",
-        "state": "Arizona",
-        "zip_code": "44860",
-        "country": "Saint Helena",
-        "website_url": "https://www.hardy.biz/",
-        "logo_url": "https://placekitten.com/136/896",
-        "industry": "significant",
-        "registration_number": "6988607496744",
-        "vat_number": "5274508952467",
-        "operating_hours": "Protect table staff hospital. Single across southern perhaps individual large.\nConsider TV expect start herself current. Necessary million top party interest deal. Rate democratic serious style.",
-        "is_active": false
-      }
+    "companies": [
     ],
     "payment_details": [
       {
@@ -771,7 +755,7 @@
         "is_active": false
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "7350ceb8-84a5-4335-a022-875639855807",
         "name": "Morgan Group",
@@ -890,7 +874,7 @@
         "is_active": true
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "823d39fc-ffad-4c34-8152-ae28ce9688f1",
         "name": "Mendoza, Macias and Wells",
@@ -1009,7 +993,7 @@
         "is_active": true
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "f3a9d3df-3658-4743-a8b4-04f8200f8647",
         "name": "Thomas, Larson and Figueroa",
@@ -1128,7 +1112,7 @@
         "is_active": false
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "6b510d7c-6e1d-4548-b966-f1145b570a56",
         "name": "Taylor-Hunt",
@@ -1247,7 +1231,7 @@
         "is_active": true
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "e54db6d9-8386-4ed5-be95-b01189603610",
         "name": "Duffy LLC",
@@ -1366,7 +1350,7 @@
         "is_active": false
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "38effa8c-ae5c-4247-b0f5-5c2448f0ba20",
         "name": "Pennington-Allen",
@@ -1485,7 +1469,7 @@
         "is_active": true
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "208e81dd-2450-4be0-a69e-513ccfab920c",
         "name": "Hayes-Armstrong",
@@ -1604,7 +1588,7 @@
         "is_active": true
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "4ad9c77f-8810-4327-92fb-0aa874f29b98",
         "name": "Rodriguez Group",
@@ -1723,7 +1707,7 @@
         "is_active": false
       }
     ],
-    "company": [
+    "companies": [
       {
         "_id": "243cf6bd-7a78-4cd9-8701-4a3e9bfcec32",
         "name": "Cunningham Group",

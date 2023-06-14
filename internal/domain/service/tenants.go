@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/hebecoding/digital-dash-commons/utils"
+	"github.com/hebecoding/tenant-management/infrastructure/apperrors"
 	"github.com/hebecoding/tenant-management/internal/domain/entities"
 	"github.com/hebecoding/tenant-management/internal/domain/repository"
 )
@@ -42,4 +43,26 @@ func (s *TenantService) DeleteTenant(ctx context.Context, id string) error {
 
 func (s *TenantService) GetTenants(ctx context.Context) ([]*entities.Tenant, error) {
 	return s.Repository.GetTenants(ctx)
+}
+
+func (s *TenantService) GetTenantCompanies(ctx context.Context, id string) ([]*entities.TenantCompanyDetails, error) {
+	var companies []*entities.TenantCompanyDetails
+
+	tenant, err := s.Repository.GetTenantByID(ctx, id)
+	if err != nil {
+		s.Logger.Error(err)
+		return nil, apperrors.ErrRetrievingTenantDocument
+	}
+
+	for _, company := range tenant.Companies {
+		companies = append(companies, company)
+	}
+
+	if len(companies) == 0 {
+		s.Logger.Info("No tenant companies found")
+		return nil, apperrors.ErrNoTenantDocumentsFound
+	}
+
+	s.Logger.Infof("Found %d tenant companies", len(companies))
+	return companies, nil
 }
