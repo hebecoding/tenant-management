@@ -44,7 +44,12 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	defer container.Terminate(ctx)
+	defer func(container *MongoDBTestContainer, ctx context.Context) {
+		err := container.Terminate(ctx)
+		if err != nil {
+			logger.Fatal(err)
+		}
+	}(container, ctx)
 
 	endpoint, err := container.Endpoint(ctx, "mongodb")
 	if err != nil {
@@ -61,7 +66,12 @@ func TestMain(m *testing.M) {
 		logger.Fatal(errors.Wrap(err, "error pinging mongo test database"))
 	}
 
-	defer client.Disconnect(context.Background())
+	defer func(client *mgo.Client, ctx context.Context) {
+		err := client.Disconnect(ctx)
+		if err != nil {
+			logger.Fatal(err)
+		}
+	}(client, context.Background())
 
 	// create new collection for tenants
 	collection := client.Database("test_tenants").Collection("tenants")
@@ -82,7 +92,12 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			logger.Fatal(err)
+		}
+	}(file)
 
 	var tenants []*entities.Tenant
 	decoder := json.NewDecoder(file)
@@ -113,7 +128,12 @@ func TestTenantRepository_Create(t *testing.T) {
 	}
 
 	logger.Info("Successfully read in test data from file")
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			logger.Fatal(err)
+		}
+	}(file)
 
 	var tests []struct {
 		Name          string
@@ -162,7 +182,12 @@ func TestTenantRepository_GetTenants(t *testing.T) {
 		assert.Nil(t, err)
 	}
 
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			logger.Fatal(err)
+		}
+	}(file)
 
 	var tests []struct {
 		Name          string
@@ -308,7 +333,12 @@ func TestTenantRepository_DeleteTenant(t *testing.T) {
 	// read in test data from testData
 	testFile, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-delete.json")
 	assert.Nil(t, err)
-	defer testFile.Close()
+	defer func(testFile *os.File) {
+		err := testFile.Close()
+		if err != nil {
+
+		}
+	}(testFile)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -347,7 +377,12 @@ func TestTenantRepository_SearchTenant(t *testing.T) {
 		logger, "../../../tests/test-data/storage/tenant-search-tenant.json",
 	)
 	assert.Nil(t, err)
-	defer testFile.Close()
+	defer func(testFile *os.File) {
+		err := testFile.Close()
+		if err != nil {
+			assert.Nil(t, err)
+		}
+	}(testFile)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -395,7 +430,12 @@ func TestTenantRepository_SearchTenants(t *testing.T) {
 		logger, "../../../tests/test-data/storage/tenant-search-tenant.json",
 	)
 	assert.Nil(t, err)
-	defer testFile.Close()
+	defer func(testFile *os.File) {
+		err := testFile.Close()
+		if err != nil {
+
+		}
+	}(testFile)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()

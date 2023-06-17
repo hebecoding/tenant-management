@@ -2,7 +2,6 @@ package mongo
 
 import (
 	"context"
-	"time"
 
 	"github.com/hebecoding/digital-dash-commons/utils"
 	"github.com/hebecoding/tenant-management/infrastructure/apperrors"
@@ -55,7 +54,6 @@ func (r *TenantRepository) DeleteTenant(ctx context.Context, id string) error {
 
 	// set isActive to false
 	tenant.IsActive = false
-	tenant.DeletedAt = time.Now()
 
 	// update tenant in database
 	if err := r.UpdateTenant(ctx, tenant); err != nil {
@@ -99,7 +97,7 @@ func (r *TenantRepository) GetTenants(ctx context.Context) ([]*entities.Tenant, 
 
 	// get all tenants from database
 	r.logger.Info("retrieving tenants from database")
-	cursor, err := r.db.Find(ctx, bson.D{{"is_active", false}})
+	cursor, err := r.db.Find(ctx, bson.D{{"is_active", true}})
 	if err != nil {
 		r.logger.Error(apperrors.ErrRetrievingTenants)
 		r.logger.Error(err)

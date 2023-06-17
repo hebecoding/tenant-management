@@ -15,7 +15,12 @@ import (
 func main() {
 	// init logger
 	logger := utils.NewLogger()
-	defer logger.Sync()
+	defer func(logger *utils.Logger) {
+		err := logger.Sync()
+		if err != nil {
+			logger.Fatal(err)
+		}
+	}(logger)
 
 	// read in configs
 	if err := config.ReadInConfig(logger); err != nil {
@@ -24,14 +29,19 @@ func main() {
 
 	// init db
 	db, err := mongo.NewMongoDB(
-		logger, context.Background(), config.Config.DB.URL,
-		"tenant-management", "tenants", "rbac",
+		context.Background(), logger, config.Config.DB.URL, "tenant-management", "tenants", "rbac",
 	)
 	if err != nil {
 		logger.Fatal(err)
 	}
 
-	defer db.Client.Disconnect(context.Background())
+	defer func(db *mongo.DB) {
+		err := db.Client.Disconnect(context.Background())
+		if err != nil {
+			logger.Fatal(err)
+		}
+	}(db)
+
 	keepRunning()
 }
 

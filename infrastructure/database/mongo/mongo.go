@@ -3,6 +3,7 @@ package mongo
 import (
 	"context"
 	"fmt"
+
 	"github.com/hebecoding/digital-dash-commons/utils"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
@@ -10,14 +11,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type MongoDB struct {
+type DB struct {
 	Client   *mongo.Client
 	Database *mongo.Database
 	Tenant   *mongo.Collection
 	RBAC     *mongo.Collection
 }
 
-func NewMongoDB(logger *utils.Logger, ctx context.Context, uri string, dbname, tenantColl, rbacColl string) (*MongoDB, error) {
+func NewMongoDB(ctx context.Context, logger *utils.Logger, uri, dbname, tenantColl, rbacColl string) (*DB, error) {
 	logger.Info("connecting to mongo")
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
@@ -33,7 +34,7 @@ func NewMongoDB(logger *utils.Logger, ctx context.Context, uri string, dbname, t
 		return nil, errors.Wrap(err, "failed to create tenant indexes")
 	}
 
-	db := &MongoDB{
+	db := &DB{
 		Client:   client,
 		Database: database,
 		Tenant:   tenant,
@@ -47,32 +48,34 @@ func createTenantIndexes(logger *utils.Logger, collection *mongo.Collection) err
 	ctx := context.Background()
 
 	logger.Info("creating indexes for tenant collection")
-	indexSlice, err := collection.Indexes().CreateMany(ctx, []mongo.IndexModel{
-		{
-			Keys: bson.M{
-				"subdomain": 1,
+	indexSlice, err := collection.Indexes().CreateMany(
+		ctx, []mongo.IndexModel{
+			{
+				Keys: bson.M{
+					"subdomain": 1,
+				},
+				Options: options.Index().SetUnique(true),
 			},
-			Options: options.Index().SetUnique(true),
-		},
-		{
-			Keys: bson.M{
-				"primary_contacts.email": 1,
+			{
+				Keys: bson.M{
+					"primary_contacts.email": 1,
+				},
+				Options: options.Index().SetName("primary_contacts.email"),
 			},
-			Options: options.Index().SetName("primary_contacts.email"),
-		},
-		{
-			Keys: bson.M{
-				"company_name": 1,
+			{
+				Keys: bson.M{
+					"company_name": 1,
+				},
+				Options: options.Index().SetName("company_name"),
 			},
-			Options: options.Index().SetName("company_name"),
-		},
-		{
-			Keys: bson.M{
-				"subscription.plan": 1,
+			{
+				Keys: bson.M{
+					"subscription.plan": 1,
+				},
+				Options: options.Index().SetName("subscription.plan"),
 			},
-			Options: options.Index().SetName("subscription.plan"),
 		},
-	})
+	)
 
 	if err != nil {
 		return errors.Wrap(err, fmt.Sprintf("failed to create indexes: %v", indexSlice))

@@ -11,6 +11,7 @@ var (
 	ErrUpdatingTenantDocument      = errors.New("error updating tenant document(s) in database")
 	ErrDeletingTenantDocument      = errors.New("error deleting tenant document(s) from database")
 	ErrUnmarshallingTenantDocument = errors.New("error unmarshalling tenant document")
+	ErrInvalidTenantSubscription   = errors.New("invalid tenant subscription")
 )
 
 const (

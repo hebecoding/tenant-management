@@ -8,14 +8,12 @@ import (
 
 	"github.com/hebecoding/digital-dash-commons/utils"
 	"github.com/hebecoding/tenant-management/helpers"
-	"github.com/hebecoding/tenant-management/infrastructure/config"
 	"github.com/hebecoding/tenant-management/infrastructure/repositories/mongo"
 	"github.com/hebecoding/tenant-management/internal/domain/entities"
 	serv "github.com/hebecoding/tenant-management/internal/domain/service"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	mgo "go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type TestTenantService struct {
@@ -25,97 +23,21 @@ type TestTenantService struct {
 }
 
 var (
-	logger  utils.LoggerInterface
-	ctx     = context.Background()
-	service = &TestTenantService{}
+	logger utils.LoggerInterface
+	ctx    = context.Background()
+	mock   = &TestTenantService{}
 )
-
-func TestMain(m *testing.M) {
-	// configure test environment
-	// initialize logger
-	logger = utils.NewLogger()
-	// read in config
-	if err := config.ReadInConfig(logger); err != nil {
-		logger.Fatal(err)
-	}
-
-	// connect to mongo test database
-	logger.Info("Connecting to mongo test database")
-
-	// connect to mongo testcontainers
-	container, err := NewMongoDBTestContainer(ctx)
-	if err != nil {
-		logger.Fatal(err)
-	}
-	defer container.Terminate(ctx)
-
-	endpoint, err := container.Endpoint(ctx, "mongodb")
-	if err != nil {
-		logger.Fatal(err)
-	}
-
-	client, err := mgo.Connect(ctx, options.Client().ApplyURI(endpoint))
-	if err != nil {
-		logger.Info("error connecting to mongo test database")
-		logger.Fatal(err)
-	}
-
-	if err := client.Ping(context.Background(), nil); err != nil {
-		logger.Fatal(errors.Wrap(err, "error pinging mongo test database"))
-	}
-
-	defer client.Disconnect(context.Background())
-
-	// create new collection for tenants
-	collection := client.Database("test_tenants").Collection("tenants")
-	service.DB = collection
-
-	logger.Info("Dropping existing test collections")
-	if err := service.DB.Drop(context.Background()); err != nil {
-		logger.Fatal(err)
-	}
-
-	// create new tenant repository
-	logger.Info("Creating new tenant repository")
-	service.Repo = mongo.NewTenantRepository(service.DB, logger)
-
-	// create test tenants
-	logger.Info("Creating test tenants")
-	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-mock-data.json")
-	if err != nil {
-		logger.Fatal(err)
-	}
-	defer file.Close()
-
-	var tenants []*entities.Tenant
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&tenants); err != nil {
-		logger.Fatal(err)
-	}
-
-	for _, tenant := range tenants {
-		_, err := service.DB.InsertOne(context.Background(), tenant)
-		if err != nil {
-			logger.Fatal(err)
-		}
-	}
-	logger.Info("Successfully created test tenants")
-
-	// create new tenant service
-	logger.Info("Creating new tenant service")
-	service.Service = serv.NewTenantService(logger, service.Repo)
-
-	// run tests
-	code := m.Run()
-
-	os.Exit(code)
-}
 
 func TestTenantService_CreateTenant(t *testing.T) {
 	// read in test data
 	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-create.json")
 	assert.NoError(t, err)
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	var tests []struct {
 		Name          string
@@ -145,7 +67,7 @@ func TestTenantService_CreateTenant(t *testing.T) {
 					cancel()
 				}
 
-				err = service.Service.CreateTenant(ctx, tt.Tenant)
+				err = mock.Service.CreateTenant(ctx, tt.Tenant)
 				if expectedErr != nil && err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
 				} else {
@@ -160,7 +82,12 @@ func TestTenantService_GetTenantByID(t *testing.T) {
 	// read in test data
 	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-get-by-id.json")
 	assert.NoError(t, err)
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	var tests []struct {
 		Name          string
@@ -190,7 +117,7 @@ func TestTenantService_GetTenantByID(t *testing.T) {
 					cancel()
 				}
 
-				_, err = service.Service.GetTenantByID(ctx, tt.TenantID)
+				_, err = mock.Service.GetTenantByID(ctx, tt.TenantID)
 
 				if expectedErr != nil && err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
@@ -208,7 +135,12 @@ func TestTenantService_UpdateTenant(t *testing.T) {
 	if err != nil {
 		logger.Error(err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	var tests []struct {
 		Name          string
@@ -244,7 +176,7 @@ func TestTenantService_UpdateTenant(t *testing.T) {
 					logger.Error(err)
 				}
 
-				err = service.Service.UpdateTenant(ctx, tt.TenantID, tenant)
+				err = mock.Service.UpdateTenant(ctx, tt.TenantID, tenant)
 				if expectedErr != nil && err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
 				} else {
@@ -261,7 +193,12 @@ func TestTenantService_DeleteTenant(t *testing.T) {
 	if err != nil {
 		logger.Error(err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	var tests []struct {
 		Name          string
@@ -285,7 +222,7 @@ func TestTenantService_DeleteTenant(t *testing.T) {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
-				err = service.Service.DeleteTenant(ctx, tt.TenantID)
+				err = mock.Service.DeleteTenant(ctx, tt.TenantID)
 				if expectedErr != nil && err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
 				} else {
@@ -302,7 +239,12 @@ func TestTenantService_GetTenants(t *testing.T) {
 	if err != nil {
 		logger.Error(err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	var tests []struct {
 		Name          string
@@ -325,7 +267,7 @@ func TestTenantService_GetTenants(t *testing.T) {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
-				_, err = service.Service.GetTenants(ctx)
+				_, err = mock.Service.GetTenants(ctx)
 				if expectedErr != nil && err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
 				} else {
@@ -342,7 +284,12 @@ func TestTenantService_GetTenantCompanies(t *testing.T) {
 	if err != nil {
 		logger.Error(err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	var tests []struct {
 		Name          string
@@ -366,7 +313,7 @@ func TestTenantService_GetTenantCompanies(t *testing.T) {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
-				_, err = service.Service.GetTenantCompanies(ctx, tt.TenantID)
+				_, err = mock.Service.GetTenantCompanies(ctx, tt.TenantID)
 				if expectedErr != nil && err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
 				} else {
@@ -375,4 +322,117 @@ func TestTenantService_GetTenantCompanies(t *testing.T) {
 			},
 		)
 	}
+}
+
+func TestTenantService_GetTenantCompaniesSubscriptions(t *testing.T) {
+	// read in test data
+	file, err := helpers.ReadInJSONTestDataFile(
+		logger, "../../../tests/test-data/storage/tenant-get-company-subscriptions.json",
+	)
+	if err != nil {
+		assert.NoError(t, err)
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			assert.NoError(t, err)
+		}
+	}(file)
+
+	var tests []struct {
+		Name          string
+		TenantID      string
+		ExpectedError string
+	}
+
+	decoder := json.NewDecoder(file)
+	if err = decoder.Decode(&tests); err != nil {
+		assert.NoError(t, err)
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.Name, func(t *testing.T) {
+				var expectedErr error
+				if tt.ExpectedError != "" {
+					expectedErr = errors.New(tt.ExpectedError)
+				}
+
+				ctx, cancel := context.WithCancel(context.Background())
+				defer cancel()
+
+				_, err = mock.Service.GetTenantCompaniesSubscriptions(ctx, tt.TenantID)
+				if expectedErr != nil && err != nil {
+					assert.Equal(t, expectedErr.Error(), err.Error())
+				} else {
+					assert.Equal(t, expectedErr, err)
+				}
+			},
+		)
+	}
+}
+
+func TestTenantService_UpdateTenantSubscription(t *testing.T) {
+	// read in tenant data
+	file, err := helpers.
+		ReadInJSONTestDataFile(
+			logger,
+			"../../../tests/test-data/storage/tenant-update-subscription.json",
+		)
+
+	if err != nil {
+		assert.NoError(t, err)
+	}
+
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			assert.NoError(t, err)
+		}
+	}(file)
+
+	var tests []struct {
+		Name          string
+		TenantID      string
+		Tenant        *entities.Tenant
+		UpdatedValues map[string]*entities.TenantSubscriptionDetails
+		ExpectedError string
+	}
+
+	decoder := json.NewDecoder(file)
+	if err = decoder.Decode(&tests); err != nil {
+		assert.NoError(t, err)
+	}
+
+	// create test tenant
+	if err = mock.Service.CreateTenant(context.Background(), tests[0].Tenant); err != nil {
+		assert.NoError(t, err)
+	}
+
+	for _, tt := range tests {
+		t.Run(
+			tt.Name, func(t *testing.T) {
+				var expectedErr error
+				if tt.ExpectedError != "" {
+					expectedErr = errors.New(tt.ExpectedError)
+				}
+
+				ctx, cancel := context.WithCancel(context.Background())
+				defer cancel()
+
+				err = mock.Service.UpdateTenantSubscription(
+					ctx,
+					tt.TenantID,
+					tt.UpdatedValues["subscriptionDetails"],
+				)
+
+				if expectedErr != nil && err != nil {
+					assert.Equal(t, expectedErr.Error(), err.Error())
+				} else {
+					assert.Equal(t, expectedErr, err)
+				}
+			},
+		)
+	}
+
 }
