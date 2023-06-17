@@ -18,7 +18,7 @@ func main() {
 	defer func(logger *utils.Logger) {
 		err := logger.Sync()
 		if err != nil {
-
+			logger.Fatal(err)
 		}
 	}(logger)
 
@@ -29,14 +29,13 @@ func main() {
 
 	// init db
 	db, err := mongo.NewMongoDB(
-		logger, context.Background(), config.Config.DB.URL,
-		"tenant-management", "tenants", "rbac",
+		context.Background(), logger, config.Config.DB.URL, "tenant-management", "tenants", "rbac",
 	)
 	if err != nil {
 		logger.Fatal(err)
 	}
 
-	defer func(db *mongo.MongoDB) {
+	defer func(db *mongo.DB) {
 		err := db.Client.Disconnect(context.Background())
 		if err != nil {
 			logger.Fatal(err)

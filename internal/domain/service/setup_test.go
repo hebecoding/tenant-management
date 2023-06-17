@@ -68,7 +68,7 @@ func TestMain(m *testing.M) {
 	defer func(container *MongoDBTestContainer, ctx context.Context) {
 		err := container.Terminate(ctx)
 		if err != nil {
-
+			logger.Fatal(err)
 		}
 	}(container, ctx)
 
@@ -90,7 +90,7 @@ func TestMain(m *testing.M) {
 	defer func(client *mgo.Client, ctx context.Context) {
 		err := client.Disconnect(ctx)
 		if err != nil {
-
+			logger.Fatal(err)
 		}
 	}(client, context.Background())
 
