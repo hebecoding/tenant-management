@@ -1,8 +1,0 @@
-[
-  {
-    "name": "Happy Path: Search Tenant with Filter",
-    "tenantID": "2608c012-942f-4e4d-a4b2-87c7629a3dc9",
-    "paymentID": "580f3a9a-1581-4a4b-b6ef-5ebc6158edb8",
-    "expectedError": ""
-  }
-  ]

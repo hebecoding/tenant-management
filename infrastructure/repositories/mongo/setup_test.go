@@ -1,52 +1,21 @@
-package service_test
+package mongo_test
 
 import (
-	"context"
 	"os"
 	"testing"
 
 	"github.com/hebecoding/digital-dash-commons/utils"
 	"github.com/hebecoding/tenant-management/infrastructure/config"
 	"github.com/hebecoding/tenant-management/infrastructure/repositories/mongo"
-	serv "github.com/hebecoding/tenant-management/internal/domain/service"
 	"github.com/pkg/errors"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	mgo "go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/net/context"
 )
 
-type MongoDBTestContainer struct {
-	testcontainers.Container
-}
-
-func NewMongoDBTestContainer(ctx context.Context) (*MongoDBTestContainer, error) {
-	req := testcontainers.ContainerRequest{
-		Image:        "mongo:6.0.5",
-		ExposedPorts: []string{"27017/tcp"},
-		WaitingFor: wait.ForAll(
-			wait.ForLog("Waiting for connections"),
-			wait.ForListeningPort("27017/tcp"),
-		),
-	}
-
-	container, err := testcontainers.GenericContainer(
-		ctx, testcontainers.GenericContainerRequest{
-			ContainerRequest: req,
-			Started:          true,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	return &MongoDBTestContainer{
-		Container: container,
-	}, nil
-}
-
 func TestMain(m *testing.M) {
-	// configure test environment
 	// initialize logger
 	logger = utils.NewLogger()
 	// read in config
@@ -93,33 +62,57 @@ func TestMain(m *testing.M) {
 
 	// create new collection for tenants
 	collection := client.Database("test_tenants").Collection("tenants")
-	mock.DB = collection
+	storage.DB = collection
 
 	logger.Info("Dropping existing test collections")
-	if err := mock.DB.Drop(context.Background()); err != nil {
+	if err := storage.DB.Drop(context.Background()); err != nil {
 		logger.Fatal(err)
 	}
 
 	// create new tenant repository
 	logger.Info("Creating new tenant repository")
-	mock.Repo = mongo.NewTenantRepository(mock.DB, logger)
-
-	// create new tenant mock
-	logger.Info("Creating new tenant mock service")
-	mock.Service = serv.NewTenantService(logger, mock.Repo)
-
-	logger.Info("Test setup complete... Running tests")
+	storage.Repo = mongo.NewTenantRepository(storage.DB, logger)
 
 	// run tests
 	code := m.Run()
 
 	os.Exit(code)
+
+}
+
+type MongoDBTestContainer struct {
+	testcontainers.Container
+}
+
+func NewMongoDBTestContainer(ctx context.Context) (*MongoDBTestContainer, error) {
+	req := testcontainers.ContainerRequest{
+		Image:        "mongo:6.0.5",
+		ExposedPorts: []string{"27017/tcp"},
+		WaitingFor: wait.ForAll(
+			wait.ForLog("Waiting for connections"),
+			wait.ForListeningPort("27017/tcp"),
+		),
+	}
+
+	container, err := testcontainers.GenericContainer(
+		ctx, testcontainers.GenericContainerRequest{
+			ContainerRequest: req,
+			Started:          true,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &MongoDBTestContainer{
+		Container: container,
+	}, nil
 }
 
 func dropTestCollections() error {
 	// drop existing collections
 	logger.Info("Dropping existing test collections")
-	if err := mock.DB.Drop(context.Background()); err != nil {
+	if err := storage.DB.Drop(context.Background()); err != nil {
 		logger.Fatal(err)
 	}
 

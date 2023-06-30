@@ -2,15 +2,14 @@ package service_test
 
 import (
 	"context"
-	"encoding/json"
-	"os"
 	"testing"
+	"time"
 
 	"github.com/hebecoding/digital-dash-commons/utils"
-	"github.com/hebecoding/tenant-management/helpers"
 	"github.com/hebecoding/tenant-management/infrastructure/repositories/mongo"
 	"github.com/hebecoding/tenant-management/internal/domain/entities"
 	serv "github.com/hebecoding/tenant-management/internal/domain/service"
+	"github.com/hebecoding/tenant-management/tests"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	mgo "go.mongodb.org/mongo-driver/mongo"
@@ -29,31 +28,28 @@ var (
 )
 
 func TestTenantService_CreateTenant(t *testing.T) {
-	// read in test data
-	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-create.json")
-	assert.NoError(t, err)
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-
-		}
-	}(file)
-
-	var tests []struct {
+	var testCases = []struct {
 		Name          string
 		Tenant        *entities.Tenant
 		ExpectedError string
 		CancelContext bool
+	}{
+		{
+			Name:   "Service: Happy Path: Create a Tenant",
+			Tenant: tests.CreateTenant(),
+		},
 	}
 
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&tests); err != nil {
-		logger.Error(err)
-	}
-
-	for _, tt := range tests {
+	for _, tt := range testCases {
 		t.Run(
 			tt.Name, func(t *testing.T) {
+				defer func() {
+					err := dropTestCollections()
+					if err != nil {
+						logger.Error(err)
+					}
+				}()
+
 				var expectedErr error
 				if tt.ExpectedError != "" {
 					expectedErr = errors.New(tt.ExpectedError)
@@ -67,11 +63,9 @@ func TestTenantService_CreateTenant(t *testing.T) {
 					cancel()
 				}
 
-				err = mock.Service.CreateTenant(ctx, tt.Tenant)
-				if expectedErr != nil && err != nil {
+				err := mock.Service.CreateTenant(ctx, tt.Tenant)
+				if expectedErr != err {
 					assert.Equal(t, expectedErr.Error(), err.Error())
-				} else {
-					assert.Equal(t, expectedErr, err)
 				}
 			},
 		)
@@ -79,31 +73,41 @@ func TestTenantService_CreateTenant(t *testing.T) {
 }
 
 func TestTenantService_GetTenantByID(t *testing.T) {
-	// read in test data
-	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-get-by-id.json")
-	assert.NoError(t, err)
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-
-		}
-	}(file)
-
-	var tests []struct {
+	var testCases = []struct {
 		Name          string
-		TenantID      string
+		Tenant        *entities.Tenant
 		ExpectedError string
 		CancelContext bool
+	}{
+		{
+			Name: "Happy Path: Get a Tenant by ID",
+			Tenant: func() *entities.Tenant {
+				tenant := tests.CreateTenant()
+				_ = mock.Service.CreateTenant(ctx, tenant)
+				return tenant
+			}(),
+		},
+		{
+			Name: "Error Path: Get a Tenant by ID - Tenant not found",
+			Tenant: func() *entities.Tenant {
+				tenant := tests.CreateTenant()
+				tenant.ID = "5f6a2b7e4c9e1f0001f1f8c5"
+				return tenant
+			}(),
+			ExpectedError: "no tenant documents found",
+		},
 	}
 
-	decoder := json.NewDecoder(file)
-	if err = decoder.Decode(&tests); err != nil {
-		logger.Error(err)
-	}
-
-	for _, tt := range tests {
+	for _, tt := range testCases {
 		t.Run(
 			tt.Name, func(t *testing.T) {
+				defer func() {
+					err := dropTestCollections()
+					if err != nil {
+						logger.Error(err)
+					}
+				}()
+
 				var expectedErr error
 				if tt.ExpectedError != "" {
 					expectedErr = errors.New(tt.ExpectedError)
@@ -117,46 +121,58 @@ func TestTenantService_GetTenantByID(t *testing.T) {
 					cancel()
 				}
 
-				_, err = mock.Service.GetTenantByID(ctx, tt.TenantID)
-
-				if expectedErr != nil && err != nil {
+				tenant, err := mock.Service.GetTenantByID(ctx, tt.Tenant.ID)
+				if err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
-				} else {
-					assert.Equal(t, expectedErr, err)
+					return
 				}
+
+				assert.Equal(t, tt.Tenant, tenant)
 			},
 		)
 	}
 }
 
 func TestTenantService_UpdateTenant(t *testing.T) {
-	// read in test data
-	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-update.json")
-	if err != nil {
-		logger.Error(err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-
-		}
-	}(file)
-
-	var tests []struct {
+	var testCases = []struct {
 		Name          string
-		TenantID      string
-		UpdatedValues map[string]any
+		Tenant        *entities.Tenant
 		ExpectedError string
+	}{
+		{
+			Name: "Happy Path: Update a Tenant - Company Subscription Details",
+			Tenant: func() *entities.Tenant {
+				tenant := tests.CreateTenant()
+				updatedTenant := &entities.Tenant{
+					ID:        tenant.ID,
+					Companies: []*entities.TenantCompanyDetails{tenant.Companies[0]},
+				}
+
+				_ = mock.Service.CreateTenant(ctx, tenant)
+
+				newSubscriptionDetails := tests.GenerateSubscriptionDetails()
+				newSubscriptionDetails.Active = true
+				newSubscriptionDetails.StartDate.Truncate(time.Millisecond)
+				newSubscriptionDetails.EndDate.Truncate(time.Millisecond)
+				newSubscriptionDetails.NextBillingDate.Truncate(time.Millisecond)
+				newSubscriptionDetails.LastPaymentDate.Truncate(time.Millisecond)
+
+				updatedTenant.Companies[0].Subscriptions = []*entities.TenantSubscriptionDetails{newSubscriptionDetails}
+
+				return updatedTenant
+			}(),
+		},
 	}
 
-	decoder := json.NewDecoder(file)
-	if err = decoder.Decode(&tests); err != nil {
-		logger.Error(err)
-	}
-
-	for _, tt := range tests {
+	for _, tt := range testCases {
 		t.Run(
 			tt.Name, func(t *testing.T) {
+				defer func() {
+					err := dropTestCollections()
+					if err != nil {
+						logger.Error(err)
+					}
+				}()
 
 				var expectedErr error
 				if tt.ExpectedError != "" {
@@ -167,20 +183,11 @@ func TestTenantService_UpdateTenant(t *testing.T) {
 				defer cancel()
 
 				tenant := &entities.Tenant{}
-				vals, err := json.Marshal(tt.UpdatedValues)
+
+				err := mock.Service.UpdateTenant(ctx, tt.Tenant.ID, tenant)
 				if err != nil {
-					logger.Error(err)
-				}
-
-				if err := json.Unmarshal(vals, tenant); err != nil {
-					logger.Error(err)
-				}
-
-				err = mock.Service.UpdateTenant(ctx, tt.TenantID, tenant)
-				if expectedErr != nil && err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
-				} else {
-					assert.Equal(t, expectedErr, err)
+					return
 				}
 			},
 		)
@@ -188,32 +195,31 @@ func TestTenantService_UpdateTenant(t *testing.T) {
 }
 
 func TestTenantService_DeleteTenant(t *testing.T) {
-	// read in test data
-	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-delete.json")
-	if err != nil {
-		logger.Error(err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-
-		}
-	}(file)
-
-	var tests []struct {
+	var testCases = []struct {
 		Name          string
 		TenantID      string
 		ExpectedError string
+	}{
+		{
+			Name: "Happy Path: Delete a Tenant",
+			TenantID: func() string {
+				tenant := tests.CreateTenant()
+				_ = mock.Service.CreateTenant(ctx, tenant)
+				return tenant.ID
+			}(),
+		},
 	}
 
-	decoder := json.NewDecoder(file)
-	if err = decoder.Decode(&tests); err != nil {
-		logger.Error(err)
-	}
-
-	for _, tt := range tests {
+	for _, tt := range testCases {
 		t.Run(
 			tt.Name, func(t *testing.T) {
+				defer func() {
+					err := dropTestCollections()
+					if err != nil {
+						logger.Error(err)
+					}
+				}()
+
 				var expectedErr error
 				if tt.ExpectedError != "" {
 					expectedErr = errors.New(tt.ExpectedError)
@@ -222,43 +228,53 @@ func TestTenantService_DeleteTenant(t *testing.T) {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
-				err = mock.Service.DeleteTenant(ctx, tt.TenantID)
-				if expectedErr != nil && err != nil {
+				err := mock.Service.DeleteTenant(ctx, tt.TenantID)
+				if err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
-				} else {
-					assert.Equal(t, expectedErr, err)
+					return
 				}
+
+				tenant, _ := mock.Service.GetTenantByID(ctx, tt.TenantID)
+				assert.False(t, tenant.IsActive)
 			},
 		)
 	}
 }
 
 func TestTenantService_GetTenants(t *testing.T) {
-	// read in test data
-	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-get-tenants.json")
-	if err != nil {
-		logger.Error(err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-
-		}
-	}(file)
-
-	var tests []struct {
+	var testCases = []struct {
 		Name          string
+		Tenants       []*entities.Tenant
 		ExpectedError string
+	}{
+		{
+			Name: "Happy Path: Get all Tenants",
+			Tenants: func() []*entities.Tenant {
+				tenants := []*entities.Tenant{
+					tests.CreateTenant(),
+					tests.CreateTenant(),
+					tests.CreateTenant(),
+				}
+
+				for _, tenant := range tenants {
+					_ = mock.Service.CreateTenant(ctx, tenant)
+				}
+
+				return tenants
+			}(),
+		},
 	}
 
-	decoder := json.NewDecoder(file)
-	if err = decoder.Decode(&tests); err != nil {
-		logger.Error(err)
-	}
-
-	for _, tt := range tests {
+	for _, tt := range testCases {
 		t.Run(
 			tt.Name, func(t *testing.T) {
+				defer func() {
+					err := dropTestCollections()
+					if err != nil {
+						logger.Error(err)
+					}
+				}()
+
 				var expectedErr error
 				if tt.ExpectedError != "" {
 					expectedErr = errors.New(tt.ExpectedError)
@@ -267,92 +283,92 @@ func TestTenantService_GetTenants(t *testing.T) {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
-				_, err = mock.Service.GetTenants(ctx)
-				if expectedErr != nil && err != nil {
-					assert.Equal(t, expectedErr.Error(), err.Error())
-				} else {
-					assert.Equal(t, expectedErr, err)
+				tenants, err := mock.Service.GetTenants(ctx)
+				if err != nil {
+					assert.EqualError(t, err, expectedErr.Error())
+					return
 				}
+
+				assert.Len(t, tenants, len(tt.Tenants))
 			},
 		)
 	}
 }
 
 func TestTenantService_GetTenantCompanies(t *testing.T) {
-	// read in test data
-	file, err := helpers.ReadInJSONTestDataFile(logger, "../../../tests/test-data/storage/tenant-get-companies.json")
-	if err != nil {
-		logger.Error(err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-
-		}
-	}(file)
-
-	var tests []struct {
+	var testCases = []struct {
 		Name          string
-		TenantID      string
+		Tenant        *entities.Tenant
 		ExpectedError string
+	}{
+		{
+			Name: "Happy Path: Get Tenant Companies",
+			Tenant: func() *entities.Tenant {
+				tenant := tests.CreateTenant()
+				updatedTenant := &entities.Tenant{ID: tenant.ID, Companies: tenant.Companies}
+				_ = mock.Service.CreateTenant(ctx, tenant)
+
+				return updatedTenant
+			}(),
+		},
 	}
 
-	decoder := json.NewDecoder(file)
-	if err = decoder.Decode(&tests); err != nil {
-		logger.Error(err)
-	}
-
-	for _, tt := range tests {
+	for _, tt := range testCases {
 		t.Run(
 			tt.Name, func(t *testing.T) {
+				defer func() {
+					err := dropTestCollections()
+					if err != nil {
+						logger.Error(err)
+					}
+				}()
+
 				var expectedErr error
 				if tt.ExpectedError != "" {
 					expectedErr = errors.New(tt.ExpectedError)
 				}
 
-				ctx, cancel := context.WithCancel(context.Background())
-				defer cancel()
-
-				_, err = mock.Service.GetTenantCompanies(ctx, tt.TenantID)
-				if expectedErr != nil && err != nil {
+				tenantCompanies, err := mock.Service.GetTenantCompanies(context.Background(), tt.Tenant.ID)
+				if err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
-				} else {
-					assert.Equal(t, expectedErr, err)
+					return
 				}
+
+				assert.EqualValues(t, tt.Tenant.Companies, tenantCompanies)
 			},
 		)
 	}
 }
 
 func TestTenantService_GetTenantCompaniesSubscriptions(t *testing.T) {
-	// read in test data
-	file, err := helpers.ReadInJSONTestDataFile(
-		logger, "../../../tests/test-data/storage/tenant-get-company-subscriptions.json",
-	)
-	if err != nil {
-		assert.NoError(t, err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			assert.NoError(t, err)
-		}
-	}(file)
-
-	var tests []struct {
+	var testCases = []struct {
 		Name          string
-		TenantID      string
+		Tenant        *entities.Tenant
 		ExpectedError string
+	}{
+		{
+			Name: "Happy Path: Get Tenant Companies Subscriptions",
+			Tenant: func() *entities.Tenant {
+				tenant := tests.CreateTenant()
+				tenantVals := &entities.Tenant{ID: tenant.ID, Companies: tenant.Companies}
+
+				_ = mock.Service.CreateTenant(context.Background(), tenant)
+
+				return tenantVals
+			}(),
+		},
 	}
 
-	decoder := json.NewDecoder(file)
-	if err = decoder.Decode(&tests); err != nil {
-		assert.NoError(t, err)
-	}
-
-	for _, tt := range tests {
+	for _, tt := range testCases {
 		t.Run(
 			tt.Name, func(t *testing.T) {
+				defer func() {
+					err := dropTestCollections()
+					if err != nil {
+						logger.Error(err)
+					}
+				}()
+
 				var expectedErr error
 				if tt.ExpectedError != "" {
 					expectedErr = errors.New(tt.ExpectedError)
@@ -361,57 +377,60 @@ func TestTenantService_GetTenantCompaniesSubscriptions(t *testing.T) {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
-				_, err = mock.Service.GetTenantCompaniesSubscriptions(ctx, tt.TenantID)
-				if expectedErr != nil && err != nil {
+				subscriptions, err := mock.Service.GetTenantCompaniesSubscriptions(ctx, tt.Tenant.ID)
+				if err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
-				} else {
-					assert.Equal(t, expectedErr, err)
+					return
 				}
+
+				testSubscriptions := []*entities.TenantSubscriptionDetails{}
+
+				for _, val := range tt.Tenant.Companies {
+					testSubscriptions = append(testSubscriptions, val.Subscriptions...)
+				}
+
+				assert.EqualValues(t, testSubscriptions, subscriptions)
 			},
 		)
 	}
 }
 
 func TestTenantService_UpdateTenantSubscription(t *testing.T) {
-	// read in tenant data
-	file, err := helpers.
-		ReadInJSONTestDataFile(
-			logger,
-			"../../../tests/test-data/storage/tenant-update-subscription.json",
-		)
-
-	if err != nil {
-		assert.NoError(t, err)
-	}
-
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			assert.NoError(t, err)
-		}
-	}(file)
-
-	var tests []struct {
+	var testCases = []struct {
 		Name          string
-		TenantID      string
 		Tenant        *entities.Tenant
-		UpdatedValues map[string]*entities.TenantSubscriptionDetails
 		ExpectedError string
+	}{
+		{
+			Name: "Happy Path: Update Tenant Subscription",
+			Tenant: func() *entities.Tenant {
+				tenant := tests.CreateTenant()
+				tenant.IsActive = true
+				tenant.Companies = tenant.Companies[:1]
+
+				_ = mock.Service.CreateTenant(context.Background(), tenant)
+
+				newSub := tests.GenerateSubscriptionDetails()
+				newSub.ID = tenant.Companies[0].Subscriptions[0].ID
+
+				updatedTenantVals := &entities.Tenant{ID: tenant.ID, Companies: tenant.Companies, IsActive: true}
+				updatedTenantVals.Companies[0].Subscriptions = []*entities.TenantSubscriptionDetails{newSub}
+
+				return updatedTenantVals
+			}(),
+		},
 	}
 
-	decoder := json.NewDecoder(file)
-	if err = decoder.Decode(&tests); err != nil {
-		assert.NoError(t, err)
-	}
-
-	// create test tenant
-	if err = mock.Service.CreateTenant(context.Background(), tests[0].Tenant); err != nil {
-		assert.NoError(t, err)
-	}
-
-	for _, tt := range tests {
-		t.Run(
+	for _, tt := range testCases {
+		defer t.Run(
 			tt.Name, func(t *testing.T) {
+				defer func() {
+					err := dropTestCollections()
+					if err != nil {
+						logger.Error(err)
+					}
+				}()
+
 				var expectedErr error
 				if tt.ExpectedError != "" {
 					expectedErr = errors.New(tt.ExpectedError)
@@ -420,17 +439,23 @@ func TestTenantService_UpdateTenantSubscription(t *testing.T) {
 				ctx, cancel := context.WithCancel(context.Background())
 				defer cancel()
 
-				err = mock.Service.UpdateTenantSubscription(
+				err := mock.Service.UpdateTenantSubscription(
 					ctx,
-					tt.TenantID,
-					tt.UpdatedValues["subscriptionDetails"],
+					tt.Tenant.ID,
+					tt.Tenant.Companies[0].Subscriptions[0],
 				)
 
-				if expectedErr != nil && err != nil {
+				if err != nil {
 					assert.Equal(t, expectedErr.Error(), err.Error())
-				} else {
-					assert.Equal(t, expectedErr, err)
+					return
 				}
+
+				subscriptions, err := mock.Service.GetTenantCompaniesSubscriptions(ctx, tt.Tenant.ID)
+				if err != nil {
+					assert.NoError(t, err)
+				}
+
+				assert.EqualValues(t, tt.Tenant.Companies[0].Subscriptions, subscriptions)
 			},
 		)
 	}
