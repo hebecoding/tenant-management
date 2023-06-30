@@ -10,7 +10,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.20.1
 	go.mongodb.org/mongo-driver v1.12.0
-	golang.org/x/net v0.10.0
+	golang.org/x/net v0.11.0
 )
 
 require (
