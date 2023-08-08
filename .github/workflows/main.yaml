@@ -26,7 +26,7 @@ jobs:
           encodedString: ${{ secrets.APPLICATION_PROPERTIES }}
 
       - name: Setup Go
-        uses: actions/setup-go@v4.0.1
+        uses: actions/setup-go@v4.1.0
 
       - name: Run Linter
         uses: reviewdog/action-golangci-lint@v2
