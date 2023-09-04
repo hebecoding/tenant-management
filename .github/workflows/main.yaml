@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout Github Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Write Secrets and Environment Variable to Application Configuration File
         id: write_file
