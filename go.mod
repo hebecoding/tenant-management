@@ -7,7 +7,7 @@ require (
 	github.com/hebecoding/digital-dash-commons v0.0.0-20230609031200-4e45f5a9770f
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.16.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.10.0
 	github.com/testcontainers/testcontainers-go v0.20.1
 	go.mongodb.org/mongo-driver v1.12.0
 	golang.org/x/net v0.11.0
